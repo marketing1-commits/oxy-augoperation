@@ -98,8 +98,9 @@ input[type=number]{width:110px;padding:7px 9px;border:1.5px solid #C9BFA5;border
 
 <!-- ADS -->
 <div class="pane" id="ads">
-  <h2>Daily Ads Spend · 照 May 结构（Normal / Retarget / Promo）</h2>
-  <p class="lede">曲线跟 May 实际 trend：W1 重炮 · 周日-25% · 8/22-23 死水忍住 · 8/25 发薪逐日加码 · 8.8 与 LIVE 单日峰值。总预算 <b>RM190.2K raw</b>（SST 另计），比例随档期换挡：Launching 50/15/35 → Pre-Live 45/20/35 → LIVE 40/20/40。</p>
+  <h2>Daily Ads Spend <span id="adsTag" class="tag" style="background:#9A8568">本地模式</span>
+    <button class="btn" style="padding:6px 14px;font-size:12px;margin-left:8px" onclick="loadAds()">↻ 刷新</button></h2>
+  <p class="lede">Plan 是照 May trend 铺的曲线；<b>实际Sales / 实际Spend 两栏可以填</b>，填了会直接写回 Sheet，自动算 Variance（实际-计划）和 Actual ROAS，看差多远。</p>
   <div class="scroll"><table id="adsTbl"></table></div>
 </div>
 
@@ -379,16 +380,55 @@ async function cycLive(i,el){
 }
 // ---- ADS ----
 const DAILY=[{"d": "25-Jul", "w": "周六", "p": "PREORDER", "n": 1400.0, "r": 560.0, "pm": 840.0, "sp": 2800.0, "st": 10000.0, "as": 10000.0, "asp": 2800.0, "roas": 3.31, "sun": false, "key": true}, {"d": "26-Jul", "w": "周日", "p": "PREORDER", "n": 1150.0, "r": 460.0, "pm": 690.0, "sp": 2300.0, "st": 8200.0, "as": 18200.0, "asp": 5100.0, "roas": 3.3, "sun": true, "key": false}, {"d": "27-Jul", "w": "周一", "p": "PREORDER", "n": 1400.0, "r": 560.0, "pm": 840.0, "sp": 2800.0, "st": 10000.0, "as": 28200.0, "asp": 7900.0, "roas": 3.31, "sun": false, "key": false}, {"d": "28-Jul", "w": "周二", "p": "PREORDER", "n": 1400.0, "r": 560.0, "pm": 840.0, "sp": 2800.0, "st": 10000.0, "as": 38200.0, "asp": 10700.0, "roas": 3.31, "sun": false, "key": false}, {"d": "29-Jul", "w": "周三", "p": "PREORDER", "n": 1400.0, "r": 560.0, "pm": 840.0, "sp": 2800.0, "st": 10000.0, "as": 48200.0, "asp": 13500.0, "roas": 3.31, "sun": false, "key": false}, {"d": "30-Jul", "w": "周四", "p": "PREORDER", "n": 1550.0, "r": 620.0, "pm": 930.0, "sp": 3100.0, "st": 11100.0, "as": 59300.0, "asp": 16600.0, "roas": 3.31, "sun": false, "key": false}, {"d": "31-Jul", "w": "周五", "p": "PREORDER", "n": 1550.0, "r": 620.0, "pm": 930.0, "sp": 3100.0, "st": 11100.0, "as": 70400.0, "asp": 19700.0, "roas": 3.31, "sun": false, "key": false}, {"d": "01-Aug", "w": "周六", "p": "LAUNCHING", "n": 3600.0, "r": 1080.0, "pm": 2520.0, "sp": 7200.0, "st": 25700.0, "as": 96100.0, "asp": 26900.0, "roas": 3.31, "sun": false, "key": true}, {"d": "02-Aug", "w": "周日", "p": "LAUNCHING", "n": 2700.0, "r": 810.0, "pm": 1890.0, "sp": 5400.0, "st": 19300.0, "as": 115400.0, "asp": 32300.0, "roas": 3.31, "sun": true, "key": false}, {"d": "03-Aug", "w": "周一", "p": "LAUNCHING", "n": 3400.0, "r": 1020.0, "pm": 2380.0, "sp": 6800.0, "st": 24300.0, "as": 139700.0, "asp": 39100.0, "roas": 3.31, "sun": false, "key": false}, {"d": "04-Aug", "w": "周二", "p": "LAUNCHING", "n": 3400.0, "r": 1020.0, "pm": 2380.0, "sp": 6800.0, "st": 24300.0, "as": 164000.0, "asp": 45900.0, "roas": 3.31, "sun": false, "key": false}, {"d": "05-Aug", "w": "周三", "p": "LAUNCHING", "n": 3400.0, "r": 1020.0, "pm": 2380.0, "sp": 6800.0, "st": 24300.0, "as": 188300.0, "asp": 52700.0, "roas": 3.31, "sun": false, "key": false}, {"d": "06-Aug", "w": "周四", "p": "LAUNCHING", "n": 3500.0, "r": 1050.0, "pm": 2450.0, "sp": 7000.0, "st": 25000.0, "as": 213300.0, "asp": 59700.0, "roas": 3.31, "sun": false, "key": false}, {"d": "07-Aug", "w": "周五", "p": "LAUNCHING", "n": 3600.0, "r": 1080.0, "pm": 2520.0, "sp": 7200.0, "st": 25700.0, "as": 239000.0, "asp": 66900.0, "roas": 3.31, "sun": false, "key": false}, {"d": "08-Aug", "w": "周六", "p": "LAUNCHING·8.8", "n": 4100.0, "r": 1230.0, "pm": 2870.0, "sp": 8200.0, "st": 29300.0, "as": 268300.0, "asp": 75100.0, "roas": 3.31, "sun": false, "key": true}, {"d": "09-Aug", "w": "周日", "p": "MID", "n": 1950.0, "r": 780.0, "pm": 1170.0, "sp": 3900.0, "st": 13900.0, "as": 282200.0, "asp": 79000.0, "roas": 3.31, "sun": true, "key": false}, {"d": "10-Aug", "w": "周一", "p": "MID", "n": 2400.0, "r": 960.0, "pm": 1440.0, "sp": 4800.0, "st": 17200.0, "as": 299400.0, "asp": 83800.0, "roas": 3.31, "sun": false, "key": false}, {"d": "11-Aug", "w": "周二", "p": "MID", "n": 2400.0, "r": 960.0, "pm": 1440.0, "sp": 4800.0, "st": 17200.0, "as": 316600.0, "asp": 88600.0, "roas": 3.31, "sun": false, "key": false}, {"d": "12-Aug", "w": "周三", "p": "MID", "n": 2400.0, "r": 960.0, "pm": 1440.0, "sp": 4800.0, "st": 17200.0, "as": 333800.0, "asp": 93400.0, "roas": 3.31, "sun": false, "key": false}, {"d": "13-Aug", "w": "周四", "p": "MID", "n": 2400.0, "r": 960.0, "pm": 1440.0, "sp": 4800.0, "st": 17200.0, "as": 351000.0, "asp": 98200.0, "roas": 3.31, "sun": false, "key": false}, {"d": "14-Aug", "w": "周五", "p": "MID", "n": 2400.0, "r": 960.0, "pm": 1440.0, "sp": 4800.0, "st": 17200.0, "as": 368200.0, "asp": 103000.0, "roas": 3.31, "sun": false, "key": false}, {"d": "15-Aug", "w": "周六", "p": "MID", "n": 2400.0, "r": 960.0, "pm": 1440.0, "sp": 4800.0, "st": 17200.0, "as": 385400.0, "asp": 107800.0, "roas": 3.31, "sun": false, "key": false}, {"d": "16-Aug", "w": "周日", "p": "MID", "n": 1950.0, "r": 780.0, "pm": 1170.0, "sp": 3900.0, "st": 13900.0, "as": 399300.0, "asp": 111700.0, "roas": 3.31, "sun": true, "key": false}, {"d": "17-Aug", "w": "周一", "p": "MID", "n": 2400.0, "r": 960.0, "pm": 1440.0, "sp": 4800.0, "st": 17200.0, "as": 416500.0, "asp": 116500.0, "roas": 3.31, "sun": false, "key": false}, {"d": "18-Aug", "w": "周二", "p": "MID", "n": 2600.0, "r": 1040.0, "pm": 1560.0, "sp": 5200.0, "st": 18600.0, "as": 435100.0, "asp": 121700.0, "roas": 3.31, "sun": false, "key": false}, {"d": "19-Aug", "w": "周三", "p": "MID·七夕", "n": 2800.0, "r": 1120.0, "pm": 1680.0, "sp": 5600.0, "st": 20000.0, "as": 455100.0, "asp": 127300.0, "roas": 3.31, "sun": false, "key": true}, {"d": "20-Aug", "w": "周四", "p": "MID", "n": 2500.0, "r": 1000.0, "pm": 1500.0, "sp": 5000.0, "st": 17900.0, "as": 473000.0, "asp": 132300.0, "roas": 3.31, "sun": false, "key": false}, {"d": "21-Aug", "w": "周五", "p": "MID", "n": 2400.0, "r": 960.0, "pm": 1440.0, "sp": 4800.0, "st": 17200.0, "as": 490200.0, "asp": 137100.0, "roas": 3.31, "sun": false, "key": false}, {"d": "22-Aug", "w": "周六", "p": "MID·死水", "n": 1750.0, "r": 700.0, "pm": 1050.0, "sp": 3500.0, "st": 12500.0, "as": 502700.0, "asp": 140600.0, "roas": 3.31, "sun": false, "key": false}, {"d": "23-Aug", "w": "周日", "p": "MID·死水", "n": 1550.0, "r": 620.0, "pm": 930.0, "sp": 3100.0, "st": 11100.0, "as": 513800.0, "asp": 143700.0, "roas": 3.31, "sun": true, "key": false}, {"d": "24-Aug", "w": "周一", "p": "PRE-LIVE加码", "n": 2070.0, "r": 920.0, "pm": 1610.0, "sp": 4600.0, "st": 16400.0, "as": 530200.0, "asp": 148300.0, "roas": 3.31, "sun": false, "key": false}, {"d": "25-Aug", "w": "周二", "p": "PRE-LIVE加码", "n": 2340.0, "r": 1040.0, "pm": 1820.0, "sp": 5200.0, "st": 18600.0, "as": 548800.0, "asp": 153500.0, "roas": 3.31, "sun": false, "key": true}, {"d": "26-Aug", "w": "周三", "p": "PRE-LIVE加码", "n": 2520.0, "r": 1120.0, "pm": 1960.0, "sp": 5600.0, "st": 20000.0, "as": 568800.0, "asp": 159100.0, "roas": 3.31, "sun": false, "key": false}, {"d": "27-Aug", "w": "周四", "p": "PRE-LIVE加码", "n": 2610.0, "r": 1160.0, "pm": 2030.0, "sp": 5800.0, "st": 20700.0, "as": 589500.0, "asp": 164900.0, "roas": 3.31, "sun": false, "key": false}, {"d": "28-Aug", "w": "周五", "p": "PRE-LIVE加码", "n": 2790.0, "r": 1240.0, "pm": 2170.0, "sp": 6200.0, "st": 22200.0, "as": 611700.0, "asp": 171100.0, "roas": 3.31, "sun": false, "key": false}, {"d": "29-Aug", "w": "周六", "p": "PRE-LIVE加码", "n": 2880.0, "r": 1280.0, "pm": 2240.0, "sp": 6400.0, "st": 22900.0, "as": 634600.0, "asp": 177500.0, "roas": 3.31, "sun": false, "key": false}, {"d": "30-Aug", "w": "周日", "p": "PRE-LIVE加码", "n": 2250.0, "r": 1000.0, "pm": 1750.0, "sp": 5000.0, "st": 17900.0, "as": 652500.0, "asp": 182500.0, "roas": 3.31, "sun": true, "key": false}, {"d": "31-Aug", "w": "周一", "p": "🏆 LIVE", "n": 3080.0, "r": 1540.0, "pm": 3080.0, "sp": 7700.0, "st": 67500.0, "as": 720000.0, "asp": 190200.0, "roas": 3.51, "sun": false, "key": true}];
+let adsLive=null; // 来自Sheet的actual数据(按row索引)
 function renderAds(){
   const fm=n=>Math.round(n).toLocaleString();
-  let h='<tr><th>Date</th><th>星期</th><th>Period</th><th class="num">Sales目标</th><th class="num">Normal</th><th class="num">Retarget</th><th class="num">Promo</th><th class="num">Daily Spend</th><th class="num">Accum Sales</th><th class="num">Accum Spend</th><th class="num">MTD ROAS</th></tr>';
-  let ts=0,tn=0,tr=0,tp=0,tsp=0;
-  DAILY.forEach(d=>{
-    ts+=d.st;tn+=d.n;tr+=d.r;tp+=d.pm;tsp+=d.sp;
-    h+=`<tr class="${d.sun?'sun':''} ${d.key?'key':''}"><td>${d.d}</td><td>${d.w}</td><td style="font-size:11.5px;color:#8A8378">${d.p}</td><td class="num">${fm(d.st)}</td><td class="num">${fm(d.n)}</td><td class="num">${fm(d.r)}</td><td class="num">${fm(d.pm)}</td><td class="num"><b>${fm(d.sp)}</b></td><td class="num">${fm(d.as)}</td><td class="num">${fm(d.asp)}</td><td class="num">${d.roas.toFixed(2)}</td></tr>`;
+  const byRow={}; if(adsLive) adsLive.forEach(r=>byRow[r.row]=r);
+  let h='<tr><th>Date</th><th>星期</th><th>Period</th><th class="num">Sales目标</th><th class="num">实际Sales</th><th class="num">Variance</th><th class="num">Daily Spend</th><th class="num">实际Spend</th><th class="num">Var%</th><th class="num">Accum Actual</th><th class="num">Actual ROAS</th></tr>';
+  let ts=0,tsp=0,taS=0,taSp=0;
+  DAILY.forEach((d,i)=>{
+    ts+=d.st; tsp+=d.sp;
+    const sheetRow=14+i;
+    const live=byRow[sheetRow];
+    const actualSales = live ? live.actualSales : null;
+    const actualSpend = live ? live.actualSpend : null;
+    const varSales = (actualSales!=null) ? actualSales-d.st : null;
+    const varPct = (actualSpend!=null && d.sp) ? ((actualSpend-d.sp)/d.sp*100) : null;
+    const accumA = live ? live.accumActualSales : null;
+    const roasA = live ? live.actualROAS : null;
+    if(actualSales!=null) taS=accumA!=null?accumA:taS;
+    if(actualSpend!=null) taSp=live&&live.accumActualSpend!=null?live.accumActualSpend:taSp;
+    const varColor = varSales==null ? '' : (varSales>=0?'color:#0F7A6B;font-weight:700':'color:#A61C1C;font-weight:700');
+    h+=`<tr class="${d.sun?'sun':''} ${d.key?'key':''}"><td>${d.d}</td><td>${d.w}</td><td style="font-size:11.5px;color:#8A8378">${d.p}</td>
+     <td class="num">${fm(d.st)}</td>
+     <td class="num"><input type="number" style="width:90px" value="${actualSales!=null?actualSales:''}" placeholder="填实际" onchange="saveActual(${sheetRow},'sales',this.value)"></td>
+     <td class="num" style="${varColor}">${varSales==null?'—':(varSales>=0?'+':'')+fm(varSales)}</td>
+     <td class="num">${fm(d.sp)}</td>
+     <td class="num"><input type="number" style="width:80px" value="${actualSpend!=null?actualSpend:''}" placeholder="填实际" onchange="saveActual(${sheetRow},'spend',this.value)"></td>
+     <td class="num" style="${varPct==null?'':(varPct<=10?'color:#0F7A6B':'color:#A61C1C')}">${varPct==null?'—':varPct.toFixed(0)+'%'}</td>
+     <td class="num">${accumA!=null?fm(accumA):'—'}</td>
+     <td class="num">${roasA!=null?roasA.toFixed(2):'—'}</td></tr>`;
   });
-  h+=`<tr class="total"><td colspan="3">TOTAL</td><td class="num">${fm(ts)}</td><td class="num">${fm(tn)}</td><td class="num">${fm(tr)}</td><td class="num">${fm(tp)}</td><td class="num">${fm(tsp)}</td><td></td><td></td><td></td></tr>`;
+  h+=`<tr class="total"><td colspan="3">TOTAL</td><td class="num">${fm(ts)}</td><td class="num">${taS?fm(taS):'—'}</td><td></td><td class="num">${fm(tsp)}</td><td class="num">${taSp?fm(taSp):'—'}</td><td></td><td></td><td></td></tr>`;
   document.getElementById('adsTbl').innerHTML=h;
+}
+async function loadAds(){
+  if(!SHEET_API) return;
+  try{
+    const res=await fetch(SHEET_API+'?action=getAds');
+    const j=await res.json();
+    adsLive=j.rows;
+    renderAds();
+    const t=document.getElementById('adsTag');
+    t.textContent='已连接 · '+new Date(j.updated).toLocaleTimeString(); t.style.background='#2E7D32';
+  }catch(e){ document.getElementById('adsTag').textContent='连接失败·本地模式'; }
+}
+async function saveActual(row,field,value){
+  if(!SHEET_API || value===''){ return; }
+  try{
+    await fetch(`${SHEET_API}?action=setAdsActual&token=${encodeURIComponent(TOKEN)}&row=${row}&field=${field}&value=${encodeURIComponent(value)}`);
+    await loadAds();
+  }catch(e){ alert('写入失败,检查网络'); }
 }
 // ---- FORECAST ----
 function switchFC(m){
@@ -532,7 +572,7 @@ function renderBudget(){
     card('FB+WA 订单',fm(ord2),'')+
     card('FB+WA Sales','RM'+fm(fw2),'FB要扛70%≈RM56K',fw2>=56000);
 }
-renderCL();renderAds();renderFC();renderFCsg();renderBudget();pullStats(false);loadChecklist();
+renderCL();renderAds();renderFC();renderFCsg();renderBudget();pullStats(false);loadChecklist();loadAds();
 </script>
 </body>
 </html>

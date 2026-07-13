@@ -29,7 +29,7 @@ tr.key td:first-child{background:#FFDFA6;font-weight:700;color:#8A5200;}
 tr.total td{background:#FBEED2;font-weight:700;border-top:2px solid #3D1F00;}
 .sec{color:#fff;font-weight:700;padding:7px 10px;margin-top:16px;border-radius:4px 4px 0 0;font-size:13.5px;}
 .status{cursor:pointer;user-select:none;text-align:center;border-radius:4px;font-weight:700;font-size:12px;padding:3px 0;}
-.st-Pending{background:#F4CCCC;color:#A61C1C;}
+.st-Pending{background:#E2DCC8;color:#6B6355;}
 .st-SubmittoDesign{background:#FFF2CC;color:#8A6B12;}
 .st-ReadytoUse{background:#CFF5F0;color:#0F7A6B;}
 .st-USED{background:#F4A7A7;color:#7A0F0F;}
@@ -75,7 +75,8 @@ input[type=number]{width:110px;padding:7px 9px;border:1.5px solid #C9BFA5;border
     <button class="btn" style="padding:6px 14px;font-size:12px;margin-left:8px" onclick="loadChecklist()">↻ 刷新</button>
     <button class="btn" style="padding:6px 14px;font-size:12px;margin-left:6px;background:var(--gold)" onclick="toggleAddTask()">+ 加任务</button>
   </h2>
-  <p class="lede">点 Status 循环 Pending → Submit to Design → Ready to Use → USED；Remark 栏放工作文件链接，会自动变成🔗按钮；点击<b>直接写回 Google Sheet Tab 3</b>。</p>
+  <p class="lede">点 Status 循环 Pending → Submit to Design → Ready to Use → USED；Remark 栏可填工作文件链接（自动变🔗按钮）；点击<b>直接写回 Google Sheet Tab 3</b>。</p>
+  <div class="grid g4" id="statusBoard" style="margin-bottom:18px"></div>
   <div class="card" id="addTaskForm" style="display:none">
     <b>新增任务</b><br><br>
     区块 <select id="atSec">
@@ -293,6 +294,20 @@ function linkify(v){
   if(/^https?:\/\//.test(v)) return `<a href="${v}" target="_blank" rel="noopener" style="color:var(--hermes);font-weight:600">🔗 打开文件</a>`;
   return `<span style="color:#9A8568;font-size:12px">${v}</span>`;
 }
+function remarkCell(row,v,editable){
+  const link = v && /^https?:\/\//.test(v);
+  if(!editable){ return linkify(v); }
+  return `<div style="display:flex;gap:6px;align-items:center">
+    ${link?`<a href="${v}" target="_blank" rel="noopener" style="color:var(--hermes)">🔗</a>`:''}
+    <input type="text" value="${v?v.replace(/"/g,'&quot;'):''}" placeholder="贴文件链接" style="width:170px;font-size:11.5px;padding:4px 6px"
+      onchange="saveRemark(${row},this.value)"></div>`;
+}
+async function saveRemark(row,value){
+  if(!SHEET_API) return;
+  try{
+    await fetch(`${SHEET_API}?action=setRemark&token=${encodeURIComponent(TOKEN)}&row=${row}&value=${encodeURIComponent(value)}`);
+  }catch(e){ alert('写入失败'); }
+}
 function renderCL(){
   let h='';
   CL.forEach(([sec,color,items],si)=>{
@@ -350,6 +365,20 @@ async function loadChecklist(){
     const t=document.getElementById('clTag');
     t.textContent='已连接 Sheet · 点击直接写回'; t.style.background='#2E7D32';
   }catch(e){ document.getElementById('clTag').textContent='连接失败·本地模式'; }
+  renderStatusBoard();
+}
+function renderStatusBoard(){
+  const STCFG=[['Pending','#6B6355','#E2DCC8'],['Submit to Design','#8A6B12','#FFF2CC'],['Ready to Use','#0F7A6B','#CFF5F0'],['USED','#7A0F0F','#F4A7A7']];
+  let items=clLive;
+  if(!items){ items=[]; CL.forEach(([sec,color,arr])=>arr.forEach(it=>items.push({status:it[4]}))); }
+  const total=items.length;
+  document.getElementById('statusBoard').innerHTML=STCFG.map(([name,fg,bg])=>{
+    const n=items.filter(it=>it.status===name).length;
+    const pct=total?Math.round(n/total*100):0;
+    return `<div class="fc" style="text-align:center"><h4>${name}</h4>
+      <div style="font-family:'IBM Plex Mono',monospace;font-size:24px;font-weight:700;color:${fg}">${n}</div>
+      <p class="note">${pct}% of ${total}</p></div>`;
+  }).join('');
 }
 function renderCLLive(){
   const secColors={'Facebook':'#3C78D8','WhatsApp':'#6AA84F','Shopee & Lazada & TikTok':'#E69138','Writing Part':'#C27BA0','Data Record':'#6D9EEB','Others':'#B45F5F'};
@@ -362,7 +391,7 @@ function renderCLLive(){
     }
     h+=`<tr><td>${it.cat}</td><td>${it.item}</td><td class="num">${it.qty}</td><td>${it.dl}</td>
     <td><div class="status ${stCls(it.status)}" onclick="cycLive(${i},this)">${it.status}</div></td>
-    <td>${linkify(it.remark)}</td></tr>`;
+    <td>${remarkCell(it.row, it.remark, true)}</td></tr>`;
   });
   h+='</table>';
   document.getElementById('clWrap').innerHTML=h;
@@ -572,7 +601,7 @@ function renderBudget(){
     card('FB+WA 订单',fm(ord2),'')+
     card('FB+WA Sales','RM'+fm(fw2),'FB要扛70%≈RM56K',fw2>=56000);
 }
-renderCL();renderAds();renderFC();renderFCsg();renderBudget();pullStats(false);loadChecklist();loadAds();
+renderCL();renderStatusBoard();renderAds();renderFC();renderFCsg();renderBudget();pullStats(false);loadChecklist();loadAds();
 </script>
 </body>
 </html>

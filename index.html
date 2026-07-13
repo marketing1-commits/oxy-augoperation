@@ -130,39 +130,48 @@ input[type=number]{width:110px;padding:7px 9px;border:1.5px solid #C9BFA5;border
 
   <div id="fcMY">
     <div class="card">
-      <b>🎯 拉滑杆试算（联动下方情景卡）</b><br><br>
+      <b>🎯 拉滑杆试算</b><br><br>
       <p class="note">ROAS <b id="fRoasV" style="color:var(--hermes)">3.50</b>（May 3.48）→ Ads Spent 自动算</p>
       <input type="range" id="fRoas" min="3.0" max="4.2" step="0.05" value="3.5" oninput="syncRoasMY()" style="width:100%;accent-color:var(--hermes)">
-      <p class="note" style="margin-top:8px">Ads Spent(RM) <input type="number" id="fAds" value="190000" onchange="renderFC()" style="width:110px"></p>
+      <p class="note" style="margin-top:10px">CPM <b id="fCpmV" style="color:var(--hermes)">RM30.0</b></p>
+      <input type="range" id="fCpm" min="10" max="50" step="0.5" value="30" oninput="renderFC()" style="width:100%;accent-color:var(--hermes)">
+      <p class="note" style="margin-top:10px">Conversion <b id="fConvV" style="color:var(--hermes)">9.0%</b></p>
+      <input type="range" id="fConv" min="10" max="35" step="0.5" value="10" oninput="renderFC()" style="width:100%;accent-color:var(--hermes)">
+      <div style="border-top:1.5px dashed #E0D0AC;margin:16px 0 12px"></div>
+      <p class="note">Ads Spent(RM) <input type="number" id="fAds" value="190000" onchange="renderFC()" style="width:110px"></p>
       New占比 <input type="number" id="fNewPct" value="58.5" step="0.5" onchange="renderFC()">%
       New AOV(RM) <input type="number" id="fAovNew" value="393" onchange="renderFC()">
       Repeat AOV(RM) <input type="number" id="fAovRep" value="1024" onchange="renderFC()">
-      其他渠道(RM) <input type="number" id="fOther" value="370000" onchange="renderFC()">
-      <p class="note" style="margin-top:6px">合格线: FB+WA Sales ≥ RM350K（对应平台占比 Facebook200K+WhatsApp150K）</p>
+      <p class="note" style="margin-top:6px">Total Orders 按 New:Repeat 比例拆开，各自 ×AOV 加总 = Total Sales，直接对比 Target。</p>
     </div>
-    <h2 style="font-size:16px">FIXED CONVERSION 9% — 不同 CPM</h2>
-    <div class="grid" id="fcCpm"></div>
-    <h2 style="font-size:16px;margin-top:22px">FIXED CPM RM30 — 不同 Conversion</h2>
-    <div class="grid" id="fcConv"></div>
+    <h2 style="font-size:16px">📋 这次拉的组合，结果长这样（整期假设）</h2>
+    <div class="grid" id="fcSummaryMY"></div>
+    <h2 style="font-size:16px;margin-top:24px">📅 接上实际进度：剩下的天数怎么冲 <span id="myAsOfTag" class="tag" style="background:#9A8568;font-size:10px">未连接实际数据</span></h2>
+    <div class="grid" id="fcRemainMY"></div>
   </div>
 
   <div id="fcSG" style="display:none">
     <div class="card">
-      <b>🎯 拉滑杆试算（联动下方情景卡）</b><br><br>
-      <p class="note">ROAS <b id="sRoasV" style="color:var(--hermes)">2.80</b>（May 2.70）→ Ads Spent 自动算</p>
+      <b>🎯 拉滑杆试算</b><br><br>
+      <p class="note">ROAS <b id="sRoasV" style="color:var(--hermes)">2.80</b>（May 2.70）→ Ads Spent(RM) 自动算 · <b>Spend/CPM用马币,Sales用新币</b></p>
       <input type="range" id="sRoas" min="2.0" max="3.5" step="0.05" value="2.8" oninput="syncRoasSG()" style="width:100%;accent-color:var(--hermes)">
-      <p class="note" style="margin-top:8px">Ads Spent(RM) <input type="number" id="sfAds" value="26000" onchange="renderFCsg()" style="width:110px"></p>
+      <p class="note" style="margin-top:10px">CPM(RM) <b id="sCpmV" style="color:var(--hermes)">RM23.0</b></p>
+      <input type="range" id="sCpm" min="10" max="50" step="0.5" value="23" oninput="renderFCsg()" style="width:100%;accent-color:var(--hermes)">
+      <p class="note" style="margin-top:10px">Conversion <b id="sConvV" style="color:var(--hermes)">7.0%</b></p>
+      <input type="range" id="sConv" min="10" max="35" step="0.5" value="10" oninput="renderFCsg()" style="width:100%;accent-color:var(--hermes)">
+      <div style="border-top:1.5px dashed #E0D0AC;margin:16px 0 12px"></div>
+      <p class="note">Ads Spent(RM) <input type="number" id="sfAds" value="26000" onchange="renderFCsg()" style="width:110px"></p>
       New占比 <input type="number" id="sfNewPct" value="80" step="0.5" onchange="renderFCsg()">%
-      New AOV(SGD) <input type="number" id="sfAovNew" value="189" onchange="renderFCsg()">
-      Repeat AOV(SGD) <input type="number" id="sfAovRep" value="374" onchange="renderFCsg()">
-      其他渠道(SGD) <input type="number" id="sfOther" value="5340" onchange="renderFCsg()">
-      <p class="note" style="margin-top:6px">合格线: <b>FB+WA Sales ≥ 80% Target = SGD21,360</b>；CPM≤RM23,Conv≥7%</p>
+      New AOV(SGD-售价) <input type="number" id="sfAovNew" value="189" onchange="renderFCsg()">
+      Repeat AOV(SGD-售价) <input type="number" id="sfAovRep" value="374" onchange="renderFCsg()">
+      <p class="note" style="margin-top:6px">Total Orders 按 New:Repeat 比例拆开，各自 ×AOV 加总 = Total Sales，直接对比 Target。</p>
     </div>
-    <h2 style="font-size:16px">FIXED CONVERSION 7% — 不同 CPM</h2>
-    <div class="grid" id="fcCpmSG"></div>
-    <h2 style="font-size:16px;margin-top:22px">FIXED CPM RM23 — 不同 Conversion</h2>
-    <div class="grid" id="fcConvSG"></div>
+    <h2 style="font-size:16px">📋 这次拉的组合，结果长这样（整期假设）</h2>
+    <div class="grid" id="fcSummarySG"></div>
     <p class="note">SG 回购池小,New占比高(80%)反映主力靠拉新</p>
+    <h2 style="font-size:16px;margin-top:24px">📅 剩下的天数怎么冲</h2>
+    <p class="note">已达成 Sales(SGD) 手动填 <input type="number" id="sgActualSales" value="0" onchange="renderFCsg()" style="width:110px">（SG暂无Sheet每日实际追踪,先手动填累计数）</p>
+    <div class="grid" id="fcRemainSG"></div>
   </div>
 </div>
 
@@ -449,6 +458,7 @@ async function loadAds(){
     const j=await res.json();
     adsLive=j.rows;
     renderAds();
+    renderFC(); // 接上实际进度后,Forecast的"剩余天数"区块要重算
     const t=document.getElementById('adsTag');
     t.textContent='已连接 · '+new Date(j.updated).toLocaleTimeString(); t.style.background='#2E7D32';
   }catch(e){ document.getElementById('adsTag').textContent='连接失败·本地模式'; }
@@ -467,60 +477,133 @@ function switchFC(m){
   document.getElementById('fcMY').style.display = m==='MY' ? '' : 'none';
   document.getElementById('fcSG').style.display = m==='SG' ? '' : 'none';
 }
-function blockGeneric(title,cpm,conv,ads,newPct,aovNew,aovRep,other,goal,cur){
-  const lead=ads/cpm, ord=lead*conv;
-  const ordNew=ord*newPct, ordRep=ord*(1-newPct);
-  const salesNew=ordNew*aovNew, salesRep=ordRep*aovRep;
-  const fbwa=salesNew+salesRep, est=fbwa+other;
-  const fm=n=>Math.round(n).toLocaleString();
-  return `<div class="fc"><h4>${title}</h4>
-   <div class="row"><span>Ads Spent</span><b>${cur}${fm(ads)}</b></div>
-   <div class="row"><span>Cost Per Lead</span><b>RM${cpm}</b></div>
-   <div class="row"><span>Total Lead</span><b>${fm(lead)}</b></div>
-   <div class="row"><span>Conversion</span><b>${(conv*100).toFixed(1)}%</b></div>
-   <div class="row"><span>Converted Order</span><b>${fm(ord)}</b></div>
-   <div class="row" style="color:#F37021"><span>🆕 New: ${fm(ordNew)}单</span><b>${cur}${fm(salesNew)}</b></div>
-   <div class="row" style="color:#C8860A"><span>🔁 Repeat: ${fm(ordRep)}单</span><b>${cur}${fm(salesRep)}</b></div>
-   <div class="row"><span>其他渠道</span><b>${cur}${fm(other)}</b></div>
-   <div class="est ${est>=goal?'ok':'bad'}">${cur}${fm(est)}</div></div>`;
+function fm_(n){ return Math.round(n).toLocaleString(); }
+function summaryCard(t,v,sub,tone){
+  const col = tone==='hermes'?'var(--hermes)':(tone==='gold'?'var(--gold)':'#3D1F00');
+  return `<div class="fc"><h4>${t}</h4><div style="font-family:'IBM Plex Mono',monospace;font-size:19px;font-weight:700;color:${col}">${v}</div>${sub?`<p class="note">${sub}</p>`:''}</div>`;
 }
-function block(title,cpm,conv){
+function renderFC(){
   const ads=parseFloat(document.getElementById('fAds').value)||190000;
+  const cpm=parseFloat(document.getElementById('fCpm').value);
+  const conv=parseFloat(document.getElementById('fConv').value)/100;
+  document.getElementById('fCpmV').textContent='RM'+cpm.toFixed(1);
+  document.getElementById('fConvV').textContent=(conv*100).toFixed(1)+'%';
   const newPct=(parseFloat(document.getElementById('fNewPct').value)||58.5)/100;
   const aovNew=parseFloat(document.getElementById('fAovNew').value)||393;
   const aovRep=parseFloat(document.getElementById('fAovRep').value)||1024;
-  const other=parseFloat(document.getElementById('fOther').value)||370000;
-  const lead=ads/cpm, ord=lead*conv;
-  const ordNew=ord*newPct, ordRep=ord*(1-newPct);
-  const salesNew=ordNew*aovNew, salesRep=ordRep*aovRep;
-  const fbwa=salesNew+salesRep, est=fbwa+other;
-  const fm=n=>Math.round(n).toLocaleString();
-  return `<div class="fc"><h4>${title}</h4>
-   <div class="row"><span>Ads Spent</span><b>RM${fm(ads)}</b></div>
-   <div class="row"><span>Cost Per Lead</span><b>RM${cpm}</b></div>
-   <div class="row"><span>Total Lead</span><b>${fm(lead)}</b></div>
-   <div class="row"><span>Conversion</span><b>${(conv*100).toFixed(1)}%</b></div>
-   <div class="row"><span>Converted Order</span><b>${fm(ord)}</b></div>
-   <div class="row" style="color:#F37021"><span>🆕 New: ${fm(ordNew)}单</span><b>RM${fm(salesNew)}</b></div>
-   <div class="row" style="color:#C8860A"><span>🔁 Repeat: ${fm(ordRep)}单</span><b>RM${fm(salesRep)}</b></div>
-   <div class="row"><span>FB+WA Sales</span><b>RM${fm(fbwa)}</b></div>
-   <div class="row"><span>其他渠道</span><b>RM${fm(other)}</b></div>
-   <div class="est ${est>=720000?'ok':'bad'}">RM${fm(est)}</div></div>`;
-}
-function renderFC(){
-  document.getElementById('fcCpm').innerHTML=[24,27,30,33].map(c=>block('CPM RM'+c+' × Conv 9%',c,0.09)).join('');
-  document.getElementById('fcConv').innerHTML=[0.075,0.085,0.095,0.105].map(v=>block('CPM RM30 × Conv '+(v*100).toFixed(1)+'%',30,v)).join('');
+  const blendedAOV=newPct*aovNew+(1-newPct)*aovRep;
+
+  // Ads → Leads → ×Conversion → Total Orders
+  const leads=ads/cpm;
+  const totalOrders=leads*conv;
+  // Total Orders 拆 New/Repeat,各自 ×AOV
+  const newOrders=totalOrders*newPct, repOrders=totalOrders*(1-newPct);
+  const newSales=newOrders*aovNew, repSales=repOrders*aovRep;
+  // 加总 = Total Sales
+  const totalSales=newSales+repSales;
+
+  const goal=720000;
+  document.getElementById('fcSummaryMY').innerHTML=
+    summaryCard('Ads Spent','RM'+fm_(ads),'CPM RM'+cpm.toFixed(1)+' → '+fm_(leads)+' leads')+
+    summaryCard('Total Orders',fm_(totalOrders)+' 单','Conversion '+(conv*100).toFixed(1)+'%')+
+    summaryCard('🆕 New Orders',fm_(newOrders)+' 单','AOV RM'+fm_(aovNew)+' → RM'+fm_(newSales),'hermes')+
+    summaryCard('🔁 Repeat Orders',fm_(repOrders)+' 单','AOV RM'+fm_(aovRep)+' → RM'+fm_(repSales),'gold')+
+    summaryCard('Total Sales','RM'+fm_(totalSales),'New + Repeat 加总')+
+    summaryCard('vs Target 720K',(totalSales/goal*100).toFixed(0)+'%',totalSales>=goal?'✅ 达标,超RM'+fm_(totalSales-goal):'⚠️ 差RM'+fm_(goal-totalSales),totalSales>=goal?'hermes':null);
+
+  // ---- 📅 剩余天数试算(接上adsLive实际进度) ----
+  const CAMPAIGN_END=new Date(2026,7,31); // Aug 31 2026
+  let mtdActualSales=0, asOfLabel='尚无实际数据(用整期假设)';
+  const t=document.getElementById('myAsOfTag');
+  if(adsLive && adsLive.length){
+    const withActual=adsLive.filter(r=>r.accumActualSales!=null);
+    if(withActual.length){
+      const last=withActual[withActual.length-1];
+      mtdActualSales=last.accumActualSales;
+      asOfLabel='更新至 '+last.date;
+      t.textContent=asOfLabel; t.style.background='#2E7D32';
+    } else { t.textContent='已连接,但未填实际数字'; t.style.background='#9A8568'; }
+  } else { t.textContent='未连接实际数据'; t.style.background='#9A8568'; }
+
+  const today=new Date();
+  const anchorDate = (adsLive&&adsLive.length&&mtdActualSales>0) ? today : today; // 都用真实今天
+  let daysRemaining=Math.ceil((CAMPAIGN_END-anchorDate)/86400000);
+  daysRemaining=Math.max(daysRemaining,0);
+  const remainingTarget=Math.max(goal-mtdActualSales,0);
+
+  if(remainingTarget<=0){
+    document.getElementById('fcRemainMY').innerHTML=summaryCard('🎉 已达标','RM'+fm_(mtdActualSales),'超出目标 RM'+fm_(mtdActualSales-goal),'hermes');
+  } else if(daysRemaining<=0){
+    document.getElementById('fcRemainMY').innerHTML=summaryCard('⚠️ campaign已结束','剩0天','差RM'+fm_(remainingTarget)+'未达标');
+  } else {
+    const ordersNeeded=remainingTarget/blendedAOV;
+    const leadsNeeded=ordersNeeded/conv;
+    const spendNeeded=leadsNeeded*cpm;
+    const dailySpend=spendNeeded/daysRemaining;
+    const dailyOrders=ordersNeeded/daysRemaining;
+    document.getElementById('fcRemainMY').innerHTML=
+      summaryCard('MTD Actual','RM'+fm_(mtdActualSales),asOfLabel)+
+      summaryCard('剩余目标','RM'+fm_(remainingTarget),'720K - MTD')+
+      summaryCard('剩余天数',daysRemaining+' 天','至8/31')+
+      summaryCard('还需 Orders',fm_(ordersNeeded)+' 单','照当前CPM/Conv/AOV假设')+
+      summaryCard('还需 Ads Spend','RM'+fm_(spendNeeded),'leads '+fm_(leadsNeeded))+
+      summaryCard('📌 日均要花','RM'+fm_(dailySpend),'/天','hermes')+
+      summaryCard('📌 日均要出','RM'+fm_(dailyOrders*blendedAOV),fm_(dailyOrders)+' 单/天','hermes');
+  }
 }
 function renderFCsg(){
   const ads=parseFloat(document.getElementById('sfAds').value)||26000;
+  const cpm=parseFloat(document.getElementById('sCpm').value);
+  const conv=parseFloat(document.getElementById('sConv').value)/100;
+  document.getElementById('sCpmV').textContent='RM'+cpm.toFixed(1);
+  document.getElementById('sConvV').textContent=(conv*100).toFixed(1)+'%';
   const newPct=(parseFloat(document.getElementById('sfNewPct').value)||80)/100;
   const aovNew=parseFloat(document.getElementById('sfAovNew').value)||189;
   const aovRep=parseFloat(document.getElementById('sfAovRep').value)||374;
-  const other=parseFloat(document.getElementById('sfOther').value)||0;
-  document.getElementById('fcCpmSG').innerHTML=[18,20,23,27].map(c=>
-    blockGeneric('CPM RM'+c+' × Conv 7%',c,0.07,ads,newPct,aovNew,aovRep,other,26700,'SGD')).join('');
-  document.getElementById('fcConvSG').innerHTML=[0.05,0.06,0.07,0.08].map(v=>
-    blockGeneric('CPM RM23 × Conv '+(v*100).toFixed(1)+'%',23,v,ads,newPct,aovNew,aovRep,other,26700,'SGD')).join('');
+  const blendedAOV=newPct*aovNew+(1-newPct)*aovRep;
+
+  const leads=ads/cpm;
+  const totalOrders=leads*conv;
+  const newOrders=totalOrders*newPct, repOrders=totalOrders*(1-newPct);
+  const newSales=newOrders*aovNew, repSales=repOrders*aovRep;
+  const totalSales=newSales+repSales;
+
+  const goal=26700;
+  document.getElementById('fcSummarySG').innerHTML=
+    summaryCard('Ads Spent(RM)','RM'+fm_(ads),'CPM RM'+cpm.toFixed(1)+' → '+fm_(leads)+' leads')+
+    summaryCard('Total Orders',fm_(totalOrders)+' 单','Conversion '+(conv*100).toFixed(1)+'%')+
+    summaryCard('🆕 New Orders',fm_(newOrders)+' 单','AOV SGD'+fm_(aovNew)+' → SGD'+fm_(newSales),'hermes')+
+    summaryCard('🔁 Repeat Orders',fm_(repOrders)+' 单','AOV SGD'+fm_(aovRep)+' → SGD'+fm_(repSales),'gold')+
+    summaryCard('Total Sales(SGD)','SGD'+fm_(totalSales),'New + Repeat 加总')+
+    summaryCard('vs Target SGD26.7K',(totalSales/goal*100).toFixed(0)+'%',totalSales>=goal?'✅ 达标,超SGD'+fm_(totalSales-goal):'⚠️ 差SGD'+fm_(goal-totalSales),totalSales>=goal?'hermes':null);
+
+  // ---- 📅 剩余天数试算(SG用手动填的已达成) ----
+  const CAMPAIGN_END_SG=new Date(2026,7,31);
+  const mtdActualSGD=parseFloat(document.getElementById('sgActualSales').value)||0;
+  const todaySG=new Date();
+  let daysRemainingSG=Math.ceil((CAMPAIGN_END_SG-todaySG)/86400000);
+  daysRemainingSG=Math.max(daysRemainingSG,0);
+  const remainingTargetSG=Math.max(goal-mtdActualSGD,0);
+
+  if(remainingTargetSG<=0){
+    document.getElementById('fcRemainSG').innerHTML=summaryCard('🎉 已达标','SGD'+fm_(mtdActualSGD),'超出目标 SGD'+fm_(mtdActualSGD-goal),'hermes');
+  } else if(daysRemainingSG<=0){
+    document.getElementById('fcRemainSG').innerHTML=summaryCard('⚠️ campaign已结束','剩0天','差SGD'+fm_(remainingTargetSG)+'未达标');
+  } else {
+    const ordersNeeded=remainingTargetSG/blendedAOV;
+    const leadsNeeded=ordersNeeded/conv;
+    const spendNeeded=leadsNeeded*cpm; // RM
+    const dailySpend=spendNeeded/daysRemainingSG;
+    const dailyOrders=ordersNeeded/daysRemainingSG;
+    document.getElementById('fcRemainSG').innerHTML=
+      summaryCard('MTD Actual(SGD)','SGD'+fm_(mtdActualSGD),'手动填')+
+      summaryCard('剩余目标','SGD'+fm_(remainingTargetSG),'26.7K - MTD')+
+      summaryCard('剩余天数',daysRemainingSG+' 天','至8/31')+
+      summaryCard('还需 Orders',fm_(ordersNeeded)+' 单','照当前CPM/Conv/AOV假设')+
+      summaryCard('还需 Ads Spend(RM)','RM'+fm_(spendNeeded),'leads '+fm_(leadsNeeded))+
+      summaryCard('📌 日均要花(RM)','RM'+fm_(dailySpend),'/天','hermes')+
+      summaryCard('📌 日均要出',fm_(dailyOrders)+' 单/天','SGD'+fm_(dailyOrders*blendedAOV)+'/天','hermes');
+  }
 }
 // ---- DRAW ----
 function doDraw(){

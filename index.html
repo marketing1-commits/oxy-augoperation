@@ -29,9 +29,10 @@ tr.key td:first-child{background:#FFDFA6;font-weight:700;color:#8A5200;}
 tr.total td{background:#FBEED2;font-weight:700;border-top:2px solid #3D1F00;}
 .sec{color:#fff;font-weight:700;padding:7px 10px;margin-top:16px;border-radius:4px 4px 0 0;font-size:13.5px;}
 .status{cursor:pointer;user-select:none;text-align:center;border-radius:4px;font-weight:700;font-size:12px;padding:3px 0;}
-.st-Pending{background:#FFF2CC;color:#8A6B12;}
-.st-Done{background:#D9EAD3;color:#2E7D32;}
-.st-SubmitforDesign{background:#CFE2F3;color:#1A56A0;}
+.st-Pending{background:#F4CCCC;color:#A61C1C;}
+.st-SubmittoDesign{background:#FFF2CC;color:#8A6B12;}
+.st-ReadytoUse{background:#CFF5F0;color:#0F7A6B;}
+.st-USED{background:#F4A7A7;color:#7A0F0F;}
 .grid{display:grid;gap:12px;grid-template-columns:repeat(auto-fit,minmax(215px,1fr));}
 .fc{background:#FFFDF6;border:1px solid #E9D9B4;padding:14px 16px;font-size:12.5px;border-radius:8px;box-shadow:0 1px 6px rgba(61,31,0,.05);}
 .fc h4{font-family:'IBM Plex Mono',monospace;font-size:12px;margin-bottom:8px;color:#6B6355;}
@@ -74,7 +75,7 @@ input[type=number]{width:110px;padding:7px 9px;border:1.5px solid #C9BFA5;border
     <button class="btn" style="padding:6px 14px;font-size:12px;margin-left:8px" onclick="loadChecklist()">↻ 刷新</button>
     <button class="btn" style="padding:6px 14px;font-size:12px;margin-left:6px;background:var(--gold)" onclick="toggleAddTask()">+ 加任务</button>
   </h2>
-  <p class="lede">点 Status 切换 Pending → Submit for Design → Done；点击<b>直接写回 Google Sheet Tab 3</b>，全队同步，一个数据源。</p>
+  <p class="lede">点 Status 循环 Pending → Submit to Design → Ready to Use → USED；Remark 栏放工作文件链接，会自动变成🔗按钮；点击<b>直接写回 Google Sheet Tab 3</b>。</p>
   <div class="card" id="addTaskForm" style="display:none">
     <b>新增任务</b><br><br>
     区块 <select id="atSec">
@@ -86,6 +87,8 @@ input[type=number]{width:110px;padding:7px 9px;border:1.5px solid #C9BFA5;border
     Item <input type="text" id="atItem" placeholder="任务内容" style="width:280px">
     Qty <input type="number" id="atQty" value="1" style="width:60px">
     Deadline <input type="text" id="atDl" placeholder="7/25" style="width:80px">
+    <br><br>
+    Remark/文件链接 <input type="text" id="atRemark" placeholder="https://drive.google.com/..." style="width:340px">
     <br><br>
     <button class="btn" onclick="submitTask()">提交</button>
     <span id="atMsg" style="margin-left:10px;font-size:13px"></span>
@@ -243,54 +246,59 @@ function go(id,btn){
 // ---- CHECKLIST ----
 const CL=[
  ['Facebook','#3C78D8',[
-  ['Page Post','FB Cover + KV 主视觉','2','Designer','7/22','Done',''],
-  ['Page Post','配套阶梯图 MY / SG','2','Designer','7/22','Done','SG改字'],
-  ['Page Post','Preorder 早鸟海报','1','Designer','7/23','Done',''],
-  ['Page Post','中奖公示图','1','Designer','8/28','Pending','得主打码'],
-  ['Reply SOP','见证图（白发/脱发/三高/养生）','4','Designer','7/23','Pending',''],
-  ['Reply SOP','新客配套图 + 回购配套图','2','Designer','7/23','Pending',''],
-  ['Reply SOP','券机制图解 + 券对比 + 升级差价图','3','Designer','7/23','Pending',''],
-  ['Reply SOP','晒券模板图','1','Designer','7/24','Pending',''],
-  ['Ads Manager','Batch 1 素材（拉新10+Retarget6）','16','Kayson/Designer','7/23','Pending','开跑弹药'],
-  ['Ads Manager','Batch 2 素材','8','Kayson/Designer','8/5','Pending',''],
-  ['Ads Manager','Batch 3 素材（七夕+换血）','7','Kayson/Designer','8/13','Pending',''],
-  ['Ads Manager','Batch 4 素材（倒数+LIVE）','11','Designer','8/20','Pending','倒数=模板改字'],
-  ['LIVE','背景板+抽奖投屏+四宫格+配套价格图(timer)','4','Designer','8/25','Pending','照rundown'],
-  ['LIVE','直播倒数video（爱马仕开箱合集）','1','Kayson','8/27','Pending','']]],
+  ['Page Post','FB Cover + KV 主视觉','2','7/22','USED',''],
+  ['Page Post','配套阶梯图 MY / SG','2','7/22','USED','SG改字'],
+  ['Page Post','Preorder 早鸟海报','1','7/23','USED',''],
+  ['Page Post','中奖公示图','1','8/28','Pending','得主打码'],
+  ['Reply SOP','见证图（白发/脱发/三高/养生）','4','7/23','Pending',''],
+  ['Reply SOP','新客配套图 + 回购配套图','2','7/23','Pending',''],
+  ['Reply SOP','券机制图解 + 券对比 + 升级差价图','3','7/23','Pending',''],
+  ['Reply SOP','晒券模板图','1','7/24','Pending',''],
+  ['Ads Manager','Batch 1 素材（拉新10+Retarget6）','16','7/23','Pending','开跑弹药'],
+  ['Ads Manager','Batch 2 素材','8','8/5','Pending',''],
+  ['Ads Manager','Batch 3 素材（七夕+换血）','7','8/13','Pending',''],
+  ['Ads Manager','Batch 4 素材（倒数+LIVE）','11','8/20','Pending','倒数=模板改字'],
+  ['LIVE','背景板+抽奖投屏+四宫格+配套价格图(timer)','4','8/25','Pending','照rundown'],
+  ['LIVE','直播倒数video（爱马仕开箱合集）','1','8/27','Pending','']]],
  ['WhatsApp','#6AA84F',[
-  ['Strive','Templates 提交审批','11','Tiffany','7/16','Pending','⚠️最急'],
-  ['Strive','Blast 名单导入（深水池+鱼塘去重）','1','Tiffany','7/21','Pending',''],
-  ['Strive','VIP群 建群 + 群链接','1','CS Lead','7/23','Pending','进群+1券'],
-  ['Strive','电子领券卡 + 订单message发送','1','Ops','7/24','Pending','三平台']]],
+  ['Strive','Templates 提交审批','11','7/16','Pending','⚠️最急'],
+  ['Strive','Blast 名单导入（深水池+鱼塘去重）','1','7/21','Pending',''],
+  ['Strive','VIP群 建群 + 群链接','1','7/23','Pending','进群+1券'],
+  ['Strive','电子领券卡 + 订单message发送','1','7/24','Pending','三平台']]],
  ['Shopee & Lazada & TikTok','#E69138',[
-  ['E-com','店铺 Cover ×3平台','3','Designer','7/22','Pending',''],
-  ['E-com','配套主图 MY6+SG6 + Variation6','18','Designer','7/22','Pending',''],
-  ['E-com','详情长图','1','Designer','7/23','Pending','三平台通用'],
-  ['E-com','Listing 上架','1','Ops','7/22','Pending','隐藏,7/25开卖'],
-  ['E-com','8.8图 + Broadcast配图×4','6','Designer','按档期','Pending','']]],
+  ['E-com','店铺 Cover ×3平台','3','7/22','Pending',''],
+  ['E-com','配套主图 MY6+SG6 + Variation6','18','7/22','Pending',''],
+  ['E-com','详情长图','1','7/23','Pending','三平台通用'],
+  ['E-com','Listing 上架','1','7/22','Pending','隐藏,7/25开卖'],
+  ['E-com','8.8图 + Broadcast配图×4','6','按档期','Pending','']]],
  ['Writing Part','#C27BA0',[
-  ['Copy','Templates 话术 11支','11','Marketing','7/15','Pending','过合规'],
-  ['Copy','Ad copy 42支','42','Marketing','按batch','Pending','ADDA'],
-  ['Copy','抽奖 T&C','1','Boss','7/20','Pending',''],
-  ['Copy','LIVE 主持脚本/cue表','1','Marketing','8/25','Pending','']]],
+  ['Copy','Templates 话术 11支','11','7/15','Pending','过合规'],
+  ['Copy','Ad copy 42支','42','按batch','Pending','ADDA'],
+  ['Copy','抽奖 T&C','1','7/20','Pending',''],
+  ['Copy','LIVE 主持脚本/cue表','1','8/25','Pending','']]],
  ['Data Record','#6D9EEB',[
-  ['Sheet','登记簿上云（CS多人共用）','1','Boss','7/23','Pending',''],
-  ['Sheet','抽奖5轮公式测试','1','Boss','8/25','Pending','']]],
+  ['Sheet','登记簿上云（CS多人共用）','1','7/23','Pending',''],
+  ['Sheet','抽奖5轮公式测试','1','8/25','Pending','']]],
  ['Others','#B45F5F',[
-  ['Company','爱马仕采购 5份','5','Boss','7/20','Pending','到货拍开箱'],
-  ['Company','赠品库存确认（sachet/shaker/pack）','1','Ops','7/20','Pending',''],
-  ['Company','CS 训练（Reply双轨+登记簿）','1','CS Lead','7/24','Pending',''],
-  ['Company','LIVE dry run','1','全员','8/29','Pending','']]]
+  ['Company','爱马仕采购 5份','5','7/20','Pending','到货拍开箱'],
+  ['Company','赠品库存确认（sachet/shaker/pack）','1','7/20','Pending',''],
+  ['Company','CS 训练（Reply双轨+登记簿）','1','7/24','Pending',''],
+  ['Company','LIVE dry run','1','8/29','Pending','']]]
 ];
-const STATES=['Pending','Submit for Design','Done'];
+const STATES=['Pending','Submit to Design','Ready to Use','USED'];
 function stCls(s){return 'st-'+s.replace(/\s+/g,'');}
+function linkify(v){
+  if(!v) return '';
+  if(/^https?:\/\//.test(v)) return `<a href="${v}" target="_blank" rel="noopener" style="color:var(--hermes);font-weight:600">🔗 打开文件</a>`;
+  return `<span style="color:#9A8568;font-size:12px">${v}</span>`;
+}
 function renderCL(){
   let h='';
   CL.forEach(([sec,color,items],si)=>{
-    h+=`<div class="sec" style="background:${color}">${sec}</div><table><tr><th>Category</th><th>Item</th><th class="num">Qty</th><th>负责</th><th>Deadline</th><th style="width:96px">Status</th><th>Remark</th></tr>`;
+    h+=`<div class="sec" style="background:${color}">${sec}</div><table><tr><th>Category</th><th>Item</th><th class="num">Qty</th><th>Deadline</th><th style="width:110px">Status</th><th>Remark(Link)</th></tr>`;
     items.forEach((it,ii)=>{
-      h+=`<tr><td>${it[0]}</td><td>${it[1]}</td><td class="num">${it[2]}</td><td>${it[3]}</td><td>${it[4]}</td>
-      <td><div class="status ${stCls(it[5])}" onclick="cyc(${si},${ii},this)">${it[5]}</div></td><td style="color:#8A8378;font-size:12px">${it[6]}</td></tr>`;
+      h+=`<tr><td>${it[0]}</td><td>${it[1]}</td><td class="num">${it[2]}</td><td>${it[3]}</td>
+      <td><div class="status ${stCls(it[4])}" onclick="cyc(${si},${ii},this)">${it[4]}</div></td><td>${linkify(it[5])}</td></tr>`;
     });
     h+='</table>';
   });
@@ -300,7 +308,7 @@ const TOKEN='oxy2026';
 let clLive=null; // 来自Sheet的checklist
 function cyc(si,ii,el){
   const cur=CL[si][2][ii][5];
-  const nxt=STATES[(STATES.indexOf(cur)+1)%3];
+  const nxt=STATES[(STATES.indexOf(cur)+1)%4];
   CL[si][2][ii][5]=nxt;
   el.className='status st-'+nxt; el.textContent=nxt;
 }
@@ -315,15 +323,16 @@ async function submitTask(){
   const item=document.getElementById('atItem').value.trim();
   const qty=document.getElementById('atQty').value||1;
   const dl=document.getElementById('atDl').value.trim();
+  const remark=document.getElementById('atRemark').value.trim();
   if(!item){ document.getElementById('atMsg').textContent='请填 Item'; return; }
   document.getElementById('atMsg').textContent='提交中…';
   try{
-    const url=`${SHEET_API}?action=addTask&token=${TOKEN}&sec=${encodeURIComponent(sec)}&cat=${encodeURIComponent(cat)}&item=${encodeURIComponent(item)}&qty=${qty}&dl=${encodeURIComponent(dl)}`;
+    const url=`${SHEET_API}?action=addTask&token=${encodeURIComponent(TOKEN)}&sec=${encodeURIComponent(sec)}&cat=${encodeURIComponent(cat)}&item=${encodeURIComponent(item)}&qty=${qty}&dl=${encodeURIComponent(dl)}&remark=${encodeURIComponent(remark)}`;
     const res=await fetch(url);
     const j=await res.json();
     if(j.ok){
       document.getElementById('atMsg').textContent='✅ 已加入 Sheet 第'+j.row+'行';
-      document.getElementById('atItem').value='';
+      document.getElementById('atItem').value=''; document.getElementById('atRemark').value='';
       await loadChecklist();
     } else {
       document.getElementById('atMsg').textContent='⚠️ '+(j.err||'失败');
@@ -348,22 +357,22 @@ function renderCLLive(){
     if(it.sec!==cur){
       if(cur) h+='</table>';
       cur=it.sec;
-      h+=`<div class="sec" style="background:${secColors[cur]||'#9A8568'}">${cur}</div><table><tr><th>Category</th><th>Item</th><th class="num">Qty</th><th>负责</th><th>Deadline</th><th style="width:96px">Status</th><th>Remark</th></tr>`;
+      h+=`<div class="sec" style="background:${secColors[cur]||'#9A8568'}">${cur}</div><table><tr><th>Category</th><th>Item</th><th class="num">Qty</th><th>Deadline</th><th style="width:110px">Status</th><th>Remark(Link)</th></tr>`;
     }
-    h+=`<tr><td>${it.cat}</td><td>${it.item}</td><td class="num">${it.qty}</td><td>${it.owner}</td><td>${it.dl}</td>
+    h+=`<tr><td>${it.cat}</td><td>${it.item}</td><td class="num">${it.qty}</td><td>${it.dl}</td>
     <td><div class="status ${stCls(it.status)}" onclick="cycLive(${i},this)">${it.status}</div></td>
-    <td style="color:#9A8568;font-size:12px">${it.remark||''}</td></tr>`;
+    <td>${linkify(it.remark)}</td></tr>`;
   });
   h+='</table>';
   document.getElementById('clWrap').innerHTML=h;
 }
 async function cycLive(i,el){
   const it=clLive[i];
-  const nxt=STATES[(STATES.indexOf(it.status)+1)%3];
+  const nxt=STATES[(STATES.indexOf(it.status)+1)%4];
   it.status=nxt;
   el.className='status '+stCls(nxt); el.textContent=nxt+' …';
   try{
-    const res=await fetch(`${SHEET_API}?action=setStatus&row=${it.row}&status=${nxt}&token=${TOKEN}`);
+    const res=await fetch(`${SHEET_API}?action=setStatus&row=${it.row}&status=${encodeURIComponent(nxt)}&token=${encodeURIComponent(TOKEN)}`);
     const j=await res.json();
     el.textContent = j.ok ? nxt : nxt+' ⚠️没写入';
   }catch(e){ el.textContent=nxt+' ⚠️离线'; }

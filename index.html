@@ -165,12 +165,20 @@ input[type=number]{width:110px;padding:7px 9px;border:1.5px solid #C9BFA5;border
       New AOV(SGD-售价) <input type="number" id="sfAovNew" value="189" onchange="renderFCsg()">
       Repeat AOV(SGD-售价) <input type="number" id="sfAovRep" value="374" onchange="renderFCsg()">
       <p class="note" style="margin-top:6px">Total Orders 按 New:Repeat 比例拆开，各自 ×AOV 加总 = Total Sales，直接对比 Target。</p>
+      <div style="border-top:1.5px dashed #E0D0AC;margin:14px 0 10px"></div>
+      <b style="font-size:12.5px">✏️ 填今天的 SG 实际数（写回 Sheet）</b><br><br>
+      日期(Sheet行号) <input type="number" id="sgFillRow" placeholder="如58=7/25" style="width:110px">
+      实际Sales(SGD) <input type="number" id="sgFillSales" style="width:100px">
+      <button class="btn" style="padding:6px 12px;font-size:12px" onclick="fillSGSales()">存Sales</button><br><br>
+      实际Spend(RM) <input type="number" id="sgFillSpend" style="width:100px">
+      <button class="btn" style="padding:6px 12px;font-size:12px" onclick="fillSGSpend()">存Spend</button>
+      <span id="sgFillMsg" style="margin-left:8px;font-size:12px"></span>
+      <p class="note">行号对照:7/25=58,7/26=59...每天+1（8/31=95）。</p>
     </div>
     <h2 style="font-size:16px">📋 这次拉的组合，结果长这样（整期假设）</h2>
     <div class="grid" id="fcSummarySG"></div>
     <p class="note">SG 回购池小,New占比高(80%)反映主力靠拉新</p>
-    <h2 style="font-size:16px;margin-top:24px">📅 剩下的天数怎么冲</h2>
-    <p class="note">已达成 Sales(SGD) 手动填 <input type="number" id="sgActualSales" value="0" onchange="renderFCsg()" style="width:110px">（SG暂无Sheet每日实际追踪,先手动填累计数）</p>
+    <h2 style="font-size:16px;margin-top:24px">📅 接上实际进度：剩下的天数怎么冲 <span id="sgAsOfTag" class="tag" style="background:#9A8568;font-size:10px">未连接实际数据</span></h2>
     <div class="grid" id="fcRemainSG"></div>
   </div>
 </div>
@@ -419,7 +427,8 @@ async function cycLive(i,el){
 }
 // ---- ADS ----
 const DAILY=[{"d": "25-Jul", "w": "周六", "p": "PREORDER", "n": 1400.0, "r": 560.0, "pm": 840.0, "sp": 2800.0, "st": 10000.0, "as": 10000.0, "asp": 2800.0, "roas": 3.31, "sun": false, "key": true}, {"d": "26-Jul", "w": "周日", "p": "PREORDER", "n": 1150.0, "r": 460.0, "pm": 690.0, "sp": 2300.0, "st": 8200.0, "as": 18200.0, "asp": 5100.0, "roas": 3.3, "sun": true, "key": false}, {"d": "27-Jul", "w": "周一", "p": "PREORDER", "n": 1400.0, "r": 560.0, "pm": 840.0, "sp": 2800.0, "st": 10000.0, "as": 28200.0, "asp": 7900.0, "roas": 3.31, "sun": false, "key": false}, {"d": "28-Jul", "w": "周二", "p": "PREORDER", "n": 1400.0, "r": 560.0, "pm": 840.0, "sp": 2800.0, "st": 10000.0, "as": 38200.0, "asp": 10700.0, "roas": 3.31, "sun": false, "key": false}, {"d": "29-Jul", "w": "周三", "p": "PREORDER", "n": 1400.0, "r": 560.0, "pm": 840.0, "sp": 2800.0, "st": 10000.0, "as": 48200.0, "asp": 13500.0, "roas": 3.31, "sun": false, "key": false}, {"d": "30-Jul", "w": "周四", "p": "PREORDER", "n": 1550.0, "r": 620.0, "pm": 930.0, "sp": 3100.0, "st": 11100.0, "as": 59300.0, "asp": 16600.0, "roas": 3.31, "sun": false, "key": false}, {"d": "31-Jul", "w": "周五", "p": "PREORDER", "n": 1550.0, "r": 620.0, "pm": 930.0, "sp": 3100.0, "st": 11100.0, "as": 70400.0, "asp": 19700.0, "roas": 3.31, "sun": false, "key": false}, {"d": "01-Aug", "w": "周六", "p": "LAUNCHING", "n": 3600.0, "r": 1080.0, "pm": 2520.0, "sp": 7200.0, "st": 25700.0, "as": 96100.0, "asp": 26900.0, "roas": 3.31, "sun": false, "key": true}, {"d": "02-Aug", "w": "周日", "p": "LAUNCHING", "n": 2700.0, "r": 810.0, "pm": 1890.0, "sp": 5400.0, "st": 19300.0, "as": 115400.0, "asp": 32300.0, "roas": 3.31, "sun": true, "key": false}, {"d": "03-Aug", "w": "周一", "p": "LAUNCHING", "n": 3400.0, "r": 1020.0, "pm": 2380.0, "sp": 6800.0, "st": 24300.0, "as": 139700.0, "asp": 39100.0, "roas": 3.31, "sun": false, "key": false}, {"d": "04-Aug", "w": "周二", "p": "LAUNCHING", "n": 3400.0, "r": 1020.0, "pm": 2380.0, "sp": 6800.0, "st": 24300.0, "as": 164000.0, "asp": 45900.0, "roas": 3.31, "sun": false, "key": false}, {"d": "05-Aug", "w": "周三", "p": "LAUNCHING", "n": 3400.0, "r": 1020.0, "pm": 2380.0, "sp": 6800.0, "st": 24300.0, "as": 188300.0, "asp": 52700.0, "roas": 3.31, "sun": false, "key": false}, {"d": "06-Aug", "w": "周四", "p": "LAUNCHING", "n": 3500.0, "r": 1050.0, "pm": 2450.0, "sp": 7000.0, "st": 25000.0, "as": 213300.0, "asp": 59700.0, "roas": 3.31, "sun": false, "key": false}, {"d": "07-Aug", "w": "周五", "p": "LAUNCHING", "n": 3600.0, "r": 1080.0, "pm": 2520.0, "sp": 7200.0, "st": 25700.0, "as": 239000.0, "asp": 66900.0, "roas": 3.31, "sun": false, "key": false}, {"d": "08-Aug", "w": "周六", "p": "LAUNCHING·8.8", "n": 4100.0, "r": 1230.0, "pm": 2870.0, "sp": 8200.0, "st": 29300.0, "as": 268300.0, "asp": 75100.0, "roas": 3.31, "sun": false, "key": true}, {"d": "09-Aug", "w": "周日", "p": "MID", "n": 1950.0, "r": 780.0, "pm": 1170.0, "sp": 3900.0, "st": 13900.0, "as": 282200.0, "asp": 79000.0, "roas": 3.31, "sun": true, "key": false}, {"d": "10-Aug", "w": "周一", "p": "MID", "n": 2400.0, "r": 960.0, "pm": 1440.0, "sp": 4800.0, "st": 17200.0, "as": 299400.0, "asp": 83800.0, "roas": 3.31, "sun": false, "key": false}, {"d": "11-Aug", "w": "周二", "p": "MID", "n": 2400.0, "r": 960.0, "pm": 1440.0, "sp": 4800.0, "st": 17200.0, "as": 316600.0, "asp": 88600.0, "roas": 3.31, "sun": false, "key": false}, {"d": "12-Aug", "w": "周三", "p": "MID", "n": 2400.0, "r": 960.0, "pm": 1440.0, "sp": 4800.0, "st": 17200.0, "as": 333800.0, "asp": 93400.0, "roas": 3.31, "sun": false, "key": false}, {"d": "13-Aug", "w": "周四", "p": "MID", "n": 2400.0, "r": 960.0, "pm": 1440.0, "sp": 4800.0, "st": 17200.0, "as": 351000.0, "asp": 98200.0, "roas": 3.31, "sun": false, "key": false}, {"d": "14-Aug", "w": "周五", "p": "MID", "n": 2400.0, "r": 960.0, "pm": 1440.0, "sp": 4800.0, "st": 17200.0, "as": 368200.0, "asp": 103000.0, "roas": 3.31, "sun": false, "key": false}, {"d": "15-Aug", "w": "周六", "p": "MID", "n": 2400.0, "r": 960.0, "pm": 1440.0, "sp": 4800.0, "st": 17200.0, "as": 385400.0, "asp": 107800.0, "roas": 3.31, "sun": false, "key": false}, {"d": "16-Aug", "w": "周日", "p": "MID", "n": 1950.0, "r": 780.0, "pm": 1170.0, "sp": 3900.0, "st": 13900.0, "as": 399300.0, "asp": 111700.0, "roas": 3.31, "sun": true, "key": false}, {"d": "17-Aug", "w": "周一", "p": "MID", "n": 2400.0, "r": 960.0, "pm": 1440.0, "sp": 4800.0, "st": 17200.0, "as": 416500.0, "asp": 116500.0, "roas": 3.31, "sun": false, "key": false}, {"d": "18-Aug", "w": "周二", "p": "MID", "n": 2600.0, "r": 1040.0, "pm": 1560.0, "sp": 5200.0, "st": 18600.0, "as": 435100.0, "asp": 121700.0, "roas": 3.31, "sun": false, "key": false}, {"d": "19-Aug", "w": "周三", "p": "MID·七夕", "n": 2800.0, "r": 1120.0, "pm": 1680.0, "sp": 5600.0, "st": 20000.0, "as": 455100.0, "asp": 127300.0, "roas": 3.31, "sun": false, "key": true}, {"d": "20-Aug", "w": "周四", "p": "MID", "n": 2500.0, "r": 1000.0, "pm": 1500.0, "sp": 5000.0, "st": 17900.0, "as": 473000.0, "asp": 132300.0, "roas": 3.31, "sun": false, "key": false}, {"d": "21-Aug", "w": "周五", "p": "MID", "n": 2400.0, "r": 960.0, "pm": 1440.0, "sp": 4800.0, "st": 17200.0, "as": 490200.0, "asp": 137100.0, "roas": 3.31, "sun": false, "key": false}, {"d": "22-Aug", "w": "周六", "p": "MID·死水", "n": 1750.0, "r": 700.0, "pm": 1050.0, "sp": 3500.0, "st": 12500.0, "as": 502700.0, "asp": 140600.0, "roas": 3.31, "sun": false, "key": false}, {"d": "23-Aug", "w": "周日", "p": "MID·死水", "n": 1550.0, "r": 620.0, "pm": 930.0, "sp": 3100.0, "st": 11100.0, "as": 513800.0, "asp": 143700.0, "roas": 3.31, "sun": true, "key": false}, {"d": "24-Aug", "w": "周一", "p": "PRE-LIVE加码", "n": 2070.0, "r": 920.0, "pm": 1610.0, "sp": 4600.0, "st": 16400.0, "as": 530200.0, "asp": 148300.0, "roas": 3.31, "sun": false, "key": false}, {"d": "25-Aug", "w": "周二", "p": "PRE-LIVE加码", "n": 2340.0, "r": 1040.0, "pm": 1820.0, "sp": 5200.0, "st": 18600.0, "as": 548800.0, "asp": 153500.0, "roas": 3.31, "sun": false, "key": true}, {"d": "26-Aug", "w": "周三", "p": "PRE-LIVE加码", "n": 2520.0, "r": 1120.0, "pm": 1960.0, "sp": 5600.0, "st": 20000.0, "as": 568800.0, "asp": 159100.0, "roas": 3.31, "sun": false, "key": false}, {"d": "27-Aug", "w": "周四", "p": "PRE-LIVE加码", "n": 2610.0, "r": 1160.0, "pm": 2030.0, "sp": 5800.0, "st": 20700.0, "as": 589500.0, "asp": 164900.0, "roas": 3.31, "sun": false, "key": false}, {"d": "28-Aug", "w": "周五", "p": "PRE-LIVE加码", "n": 2790.0, "r": 1240.0, "pm": 2170.0, "sp": 6200.0, "st": 22200.0, "as": 611700.0, "asp": 171100.0, "roas": 3.31, "sun": false, "key": false}, {"d": "29-Aug", "w": "周六", "p": "PRE-LIVE加码", "n": 2880.0, "r": 1280.0, "pm": 2240.0, "sp": 6400.0, "st": 22900.0, "as": 634600.0, "asp": 177500.0, "roas": 3.31, "sun": false, "key": false}, {"d": "30-Aug", "w": "周日", "p": "PRE-LIVE加码", "n": 2250.0, "r": 1000.0, "pm": 1750.0, "sp": 5000.0, "st": 17900.0, "as": 652500.0, "asp": 182500.0, "roas": 3.31, "sun": true, "key": false}, {"d": "31-Aug", "w": "周一", "p": "🏆 LIVE", "n": 3080.0, "r": 1540.0, "pm": 3080.0, "sp": 7700.0, "st": 67500.0, "as": 720000.0, "asp": 190200.0, "roas": 3.51, "sun": false, "key": true}];
-let adsLive=null; // 来自Sheet的actual数据(按row索引)
+let adsLive=null; // 来自Sheet的actual数据(按row索引,MY)
+let sgAdsLive=null; // 来自Sheet的actual数据(SG)
 function renderAds(){
   const fm=n=>Math.round(n).toLocaleString();
   const byRow={}; if(adsLive) adsLive.forEach(r=>byRow[r.row]=r);
@@ -462,6 +471,37 @@ async function loadAds(){
     const t=document.getElementById('adsTag');
     t.textContent='已连接 · '+new Date(j.updated).toLocaleTimeString(); t.style.background='#2E7D32';
   }catch(e){ document.getElementById('adsTag').textContent='连接失败·本地模式'; }
+}
+async function loadAdsSG(){
+  if(!SHEET_API) return;
+  try{
+    const res=await fetch(SHEET_API+'?action=getAdsSG');
+    const j=await res.json();
+    sgAdsLive=j.rows;
+    renderFCsg(); // 接上SG实际进度后重算"剩余天数"区块
+  }catch(e){ /* 静默失败,SG remain区块会显示未连接 */ }
+}
+async function fillSGSales(){
+  const row=document.getElementById('sgFillRow').value;
+  const val=document.getElementById('sgFillSales').value;
+  if(!SHEET_API||!row||val===''){ document.getElementById('sgFillMsg').textContent='填行号+数字'; return; }
+  document.getElementById('sgFillMsg').textContent='存中…';
+  try{
+    await fetch(`${SHEET_API}?action=setAdsActualSG&token=${encodeURIComponent(TOKEN)}&row=${row}&field=sales&value=${encodeURIComponent(val)}`);
+    document.getElementById('sgFillMsg').textContent='✅ 已存';
+    loadAdsSG();
+  }catch(e){ document.getElementById('sgFillMsg').textContent='⚠️失败'; }
+}
+async function fillSGSpend(){
+  const row=document.getElementById('sgFillRow').value;
+  const val=document.getElementById('sgFillSpend').value;
+  if(!SHEET_API||!row||val===''){ document.getElementById('sgFillMsg').textContent='填行号+数字'; return; }
+  document.getElementById('sgFillMsg').textContent='存中…';
+  try{
+    await fetch(`${SHEET_API}?action=setAdsActualSG&token=${encodeURIComponent(TOKEN)}&row=${row}&field=spend&value=${encodeURIComponent(val)}`);
+    document.getElementById('sgFillMsg').textContent='✅ 已存';
+    loadAdsSG();
+  }catch(e){ document.getElementById('sgFillMsg').textContent='⚠️失败'; }
 }
 async function saveActual(row,field,value){
   if(!SHEET_API || value===''){ return; }
@@ -577,9 +617,20 @@ function renderFCsg(){
     summaryCard('Total Sales(SGD)','SGD'+fm_(totalSales),'New + Repeat 加总')+
     summaryCard('vs Target SGD26.7K',(totalSales/goal*100).toFixed(0)+'%',totalSales>=goal?'✅ 达标,超SGD'+fm_(totalSales-goal):'⚠️ 差SGD'+fm_(goal-totalSales),totalSales>=goal?'hermes':null);
 
-  // ---- 📅 剩余天数试算(SG用手动填的已达成) ----
+  // ---- 📅 剩余天数试算(接上sgAdsLive实际进度) ----
   const CAMPAIGN_END_SG=new Date(2026,7,31);
-  const mtdActualSGD=parseFloat(document.getElementById('sgActualSales').value)||0;
+  let mtdActualSGD=0, asOfLabelSG='尚无实际数据(用整期假设)';
+  const tSG=document.getElementById('sgAsOfTag');
+  if(sgAdsLive && sgAdsLive.length){
+    const withActual=sgAdsLive.filter(r=>r.accumActualSales!=null);
+    if(withActual.length){
+      const last=withActual[withActual.length-1];
+      mtdActualSGD=last.accumActualSales;
+      asOfLabelSG='更新至 '+last.date;
+      tSG.textContent=asOfLabelSG; tSG.style.background='#2E7D32';
+    } else { tSG.textContent='已连接,但未填实际数字'; tSG.style.background='#9A8568'; }
+  } else { tSG.textContent='未连接实际数据'; tSG.style.background='#9A8568'; }
+
   const todaySG=new Date();
   let daysRemainingSG=Math.ceil((CAMPAIGN_END_SG-todaySG)/86400000);
   daysRemainingSG=Math.max(daysRemainingSG,0);
@@ -596,7 +647,7 @@ function renderFCsg(){
     const dailySpend=spendNeeded/daysRemainingSG;
     const dailyOrders=ordersNeeded/daysRemainingSG;
     document.getElementById('fcRemainSG').innerHTML=
-      summaryCard('MTD Actual(SGD)','SGD'+fm_(mtdActualSGD),'手动填')+
+      summaryCard('MTD Actual(SGD)','SGD'+fm_(mtdActualSGD),asOfLabelSG)+
       summaryCard('剩余目标','SGD'+fm_(remainingTargetSG),'26.7K - MTD')+
       summaryCard('剩余天数',daysRemainingSG+' 天','至8/31')+
       summaryCard('还需 Orders',fm_(ordersNeeded)+' 单','照当前CPM/Conv/AOV假设')+
@@ -667,7 +718,7 @@ function syncRoasSG(){
   document.getElementById('sfAds').value=Math.round(26700*3/r/1.08/100)*100; // SGD26.7K≈RM80K,spend算RM再由sfAds当RM输入
   renderFCsg();
 }
-renderCL();renderStatusBoard();renderAds();renderFC();renderFCsg();pullStats(false);loadChecklist();loadAds();
+renderCL();renderStatusBoard();renderAds();renderFC();renderFCsg();pullStats(false);loadChecklist();loadAds();loadAdsSG();
 </script>
 </body>
 </html>

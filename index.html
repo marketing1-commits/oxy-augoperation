@@ -161,9 +161,9 @@ input[type=number]{width:110px;padding:7px 9px;border:1.5px solid #C9BFA5;border
       <input type="range" id="sConv" min="10" max="35" step="0.5" value="10" oninput="renderFCsg()" style="width:100%;accent-color:var(--hermes)">
       <div style="border-top:1.5px dashed #E0D0AC;margin:16px 0 12px"></div>
       <p class="note">Ads Spent(RM) <input type="number" id="sfAds" value="26000" onchange="renderFCsg()" style="width:110px"></p>
-      New占比 <input type="number" id="sfNewPct" value="80" step="0.5" onchange="renderFCsg()">%
-      New AOV(SGD-售价) <input type="number" id="sfAovNew" value="189" onchange="renderFCsg()">
-      Repeat AOV(SGD-售价) <input type="number" id="sfAovRep" value="374" onchange="renderFCsg()">
+      New占比 <input type="number" id="sfNewPct" value="77.4" step="0.5" onchange="renderFCsg()">%
+      New AOV(SGD-售价) <input type="number" id="sfAovNew" value="204" onchange="renderFCsg()">
+      Repeat AOV(SGD-售价) <input type="number" id="sfAovRep" value="415" onchange="renderFCsg()">
       <p class="note" style="margin-top:6px">Total Orders 按 New:Repeat 比例拆开，各自 ×AOV 加总 = Total Sales，直接对比 Target。</p>
       <div style="border-top:1.5px dashed #E0D0AC;margin:14px 0 10px"></div>
       <b style="font-size:12.5px">✏️ 填今天的 SG 实际数（写回 Sheet）</b><br><br>
@@ -177,7 +177,7 @@ input[type=number]{width:110px;padding:7px 9px;border:1.5px solid #C9BFA5;border
     </div>
     <h2 style="font-size:16px">📋 这次拉的组合，结果长这样（整期假设）</h2>
     <div class="grid" id="fcSummarySG"></div>
-    <p class="note">SG 回购池小,New占比高(80%)反映主力靠拉新</p>
+    <p class="note">SG 回购池小,New占比高(77%)反映主力靠拉新 · New线=1/2/4罐,Repeat线=6/8/12罐</p>
     <h2 style="font-size:16px;margin-top:24px">📅 接上实际进度：剩下的天数怎么冲 <span id="sgAsOfTag" class="tag" style="background:#9A8568;font-size:10px">未连接实际数据</span></h2>
     <div class="grid" id="fcRemainSG"></div>
   </div>
@@ -196,16 +196,16 @@ input[type=number]{width:110px;padding:7px 9px;border:1.5px solid #C9BFA5;border
     <tr><td><b>Repeat C · 10罐 ⭐</b></td><td class="num">RM1,488</td><td class="num">10</td><td>Free 1 Pack Oxy + Shaker</td><td class="num">107</td><td class="num">RM159,216</td></tr>
     <tr class="total"><td>TOTAL</td><td></td><td></td><td></td><td class="num">1,067 单</td><td class="num">RM725,406</td></tr>
   </table>
-  <h2 style="font-size:16px">🇸🇬 Singapore — 无券直接特价（同结构同赠品）</h2>
+  <h2 style="font-size:16px">🇸🇬 Singapore — 中秋档 · 无券直接特价(双数罐=送礼装)（同结构同赠品）</h2>
   <table>
     <tr><th>Package</th><th class="num">价格</th><th>🎁赠品</th><th class="num">Target</th><th class="num">Projected</th></tr>
     <tr><td>1罐</td><td class="num">$99</td><td>—</td><td class="num">8</td><td class="num">$792</td></tr>
-    <tr><td>2罐</td><td class="num">$168</td><td>—</td><td class="num">48</td><td class="num">$8,064</td></tr>
-    <tr><td><b>3罐 ⭐</b></td><td class="num">$229</td><td>Sachet×3 + Shaker</td><td class="num">43</td><td class="num">$9,847</td></tr>
-    <tr><td>5罐</td><td class="num">$309</td><td>Sachet×6 + Shaker</td><td class="num">15</td><td class="num">$4,635</td></tr>
-    <tr><td>7罐</td><td class="num">$408</td><td>Free 1 Pack Oxy + Shaker</td><td class="num">6</td><td class="num">$2,448</td></tr>
-    <tr><td>10罐</td><td class="num">$569</td><td>Free 1 Pack Oxy + Shaker</td><td class="num">4</td><td class="num">$2,276</td></tr>
-    <tr class="total"><td>TOTAL</td><td></td><td></td><td class="num">124 单</td><td class="num">SGD28,062 ≈ RM84K</td></tr>
+    <tr><td>2罐</td><td class="num">$168</td><td>—</td><td class="num">42</td><td class="num">$7,056</td></tr>
+    <tr><td><b>4罐 ⭐</b></td><td class="num">$278</td><td>Sachet×3 + Shaker</td><td class="num">32</td><td class="num">$8,896</td></tr>
+    <tr><td>6罐</td><td class="num">$368</td><td>Sachet×6 + Shaker</td><td class="num">16</td><td class="num">$5,888</td></tr>
+    <tr><td>8罐</td><td class="num">$459</td><td>Free 1 Pack Oxy + Shaker</td><td class="num">6</td><td class="num">$2,754</td></tr>
+    <tr><td>12罐 🥮</td><td class="num">$658</td><td>Free 1 Pack Oxy + Shaker</td><td class="num">2</td><td class="num">$1,316</td></tr>
+    <tr class="total"><td>TOTAL</td><td></td><td></td><td class="num">106 单</td><td class="num">SGD26,702 ≈ RM80K</td></tr>
   </table>
   <div class="rule"><b>⚠️ 8月无1罐配套</b> — menu 从 RM358 起跳。CS 暗器救单（不印图上）：1罐+1Box RM188 / 老客3罐 RM489 裸价。</div>
   <div class="rule"><b>Preorder（7/25–31）：</b>MY 券×2（认付款日）｜SG 再折$10 + sachet双倍。<b>进群双拉力：</b>进群+1券（限1次）；得主群内先公布，24h未回应重抽。老客 3罐 RM489 保留裸价陪衬。</div>
@@ -597,9 +597,9 @@ function renderFCsg(){
   const conv=parseFloat(document.getElementById('sConv').value)/100;
   document.getElementById('sCpmV').textContent='RM'+cpm.toFixed(1);
   document.getElementById('sConvV').textContent=(conv*100).toFixed(1)+'%';
-  const newPct=(parseFloat(document.getElementById('sfNewPct').value)||80)/100;
-  const aovNew=parseFloat(document.getElementById('sfAovNew').value)||189;
-  const aovRep=parseFloat(document.getElementById('sfAovRep').value)||374;
+  const newPct=(parseFloat(document.getElementById('sfNewPct').value)||77.4)/100;
+  const aovNew=parseFloat(document.getElementById('sfAovNew').value)||204;
+  const aovRep=parseFloat(document.getElementById('sfAovRep').value)||415;
   const blendedAOV=newPct*aovNew+(1-newPct)*aovRep;
 
   const leads=ads/cpm;

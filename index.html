@@ -139,8 +139,8 @@ input[type=number]{width:110px;padding:7px 9px;border:1.5px solid #C9BFA5;border
       <input type="range" id="fConv" min="10" max="35" step="0.5" value="10" oninput="renderFC()" style="width:100%;accent-color:var(--hermes)">
       <div style="border-top:1.5px dashed #E0D0AC;margin:16px 0 12px"></div>
       <p class="note">Ads Spent(RM) <input type="number" id="fAds" value="190000" onchange="renderFC()" style="width:110px"></p>
-      New占比 <input type="number" id="fNewPct" value="58.5" step="0.5" onchange="renderFC()">%
-      New AOV(RM) <input type="number" id="fAovNew" value="393" onchange="renderFC()">
+      New占比 <input type="number" id="fNewPct" value="57.2" step="0.5" onchange="renderFC()">%
+      New AOV(RM) <input type="number" id="fAovNew" value="422" onchange="renderFC()">
       Repeat AOV(RM) <input type="number" id="fAovRep" value="1024" onchange="renderFC()">
       <p class="note" style="margin-top:6px">Total Orders 按 New:Repeat 比例拆开，各自 ×AOV 加总 = Total Sales，直接对比 Target。</p>
     </div>
@@ -189,13 +189,12 @@ input[type=number]{width:110px;padding:7px 9px;border:1.5px solid #C9BFA5;border
   <h2 style="font-size:16px">🇲🇾 Malaysia — 有券</h2>
   <table>
     <tr><th>Package</th><th class="num">价格</th><th class="num">🎫券</th><th>🎁赠品</th><th class="num">Target</th><th class="num">Projected</th></tr>
-    <tr><td>Promo A · 1罐</td><td class="num">RM188</td><td class="num">—</td><td>—</td><td class="num">100</td><td class="num">RM18,800</td></tr>
-    <tr><td>Promo B · 2罐</td><td class="num">RM358</td><td class="num">1</td><td>—（券即赠品）</td><td class="num">285</td><td class="num">RM102,030</td></tr>
-    <tr><td><b>Promo C · 3罐 ⭐</b></td><td class="num">RM509</td><td class="num">2</td><td>Sachet×3 + Shaker</td><td class="num">260</td><td class="num">RM132,340</td></tr>
+    <tr><td>Promo A · 2罐（入口）</td><td class="num">RM358</td><td class="num">1</td><td>—（券即赠品）</td><td class="num">350</td><td class="num">RM125,300</td></tr>
+    <tr><td><b>Promo B · 3罐 ⭐</b></td><td class="num">RM509</td><td class="num">2</td><td>Sachet×3 + Shaker</td><td class="num">260</td><td class="num">RM132,340</td></tr>
     <tr><td>Repeat A · 5罐</td><td class="num">RM799</td><td class="num">4</td><td>Sachet×9 + Shaker</td><td class="num">250</td><td class="num">RM199,750</td></tr>
     <tr><td>Repeat B · 7罐</td><td class="num">RM1,088</td><td class="num">6</td><td>Free 1 Pack Oxy</td><td class="num">100</td><td class="num">RM108,800</td></tr>
     <tr><td><b>Repeat C · 10罐 ⭐</b></td><td class="num">RM1,488</td><td class="num">10</td><td>Free 1 Pack Oxy</td><td class="num">107</td><td class="num">RM159,216</td></tr>
-    <tr class="total"><td>TOTAL</td><td></td><td></td><td></td><td class="num">1,102 单</td><td class="num">RM720,936</td></tr>
+    <tr class="total"><td>TOTAL</td><td></td><td></td><td></td><td class="num">1,067 单</td><td class="num">RM725,406</td></tr>
   </table>
   <h2 style="font-size:16px">🇸🇬 Singapore — 无券直接特价（同结构同赠品）</h2>
   <table>
@@ -208,6 +207,7 @@ input[type=number]{width:110px;padding:7px 9px;border:1.5px solid #C9BFA5;border
     <tr><td>10罐</td><td class="num">$569</td><td>Free 1 Pack Oxy</td><td class="num">4</td><td class="num">$2,276</td></tr>
     <tr class="total"><td>TOTAL</td><td></td><td></td><td class="num">124 单</td><td class="num">SGD28,062 ≈ RM84K</td></tr>
   </table>
+  <div class="rule"><b>⚠️ 8月无1罐配套</b> — menu 从 RM358 起跳。CS 暗器救单（不印图上）：1罐+1Box RM188 / 老客3罐 RM489 裸价。</div>
   <div class="rule"><b>Preorder（7/25–31）：</b>MY 券×2（认付款日）｜SG 再折$10 + sachet双倍。<b>进群双拉力：</b>进群+1券（限1次）；得主群内先公布，24h未回应重抽。老客 3罐 RM489 保留裸价陪衬。</div>
 </div>
 
@@ -528,8 +528,8 @@ function renderFC(){
   const conv=parseFloat(document.getElementById('fConv').value)/100;
   document.getElementById('fCpmV').textContent='RM'+cpm.toFixed(1);
   document.getElementById('fConvV').textContent=(conv*100).toFixed(1)+'%';
-  const newPct=(parseFloat(document.getElementById('fNewPct').value)||58.5)/100;
-  const aovNew=parseFloat(document.getElementById('fAovNew').value)||393;
+  const newPct=(parseFloat(document.getElementById('fNewPct').value)||57.2)/100;
+  const aovNew=parseFloat(document.getElementById('fAovNew').value)||422;
   const aovRep=parseFloat(document.getElementById('fAovRep').value)||1024;
   const blendedAOV=newPct*aovNew+(1-newPct)*aovRep;
 

@@ -207,51 +207,72 @@ input[type=number]{width:110px;padding:7px 9px;border:1.5px solid #C9BFA5;border
     <tr><td>12罐 🥮</td><td class="num">$658</td><td>Free 1 Pack Oxy + Shaker</td><td class="num">2</td><td class="num">$1,316</td></tr>
     <tr class="total"><td>TOTAL</td><td></td><td></td><td class="num">106 单</td><td class="num">SGD26,702 ≈ RM80K</td></tr>
   </table>
-  <div class="rule"><b>⚠️ 8月无1罐配套</b> — menu 从 RM358 起跳。CS 暗器救单（不印图上）：1罐+1Box RM188 / 老客3罐 RM489 裸价。</div>
-  <div class="rule"><b>Preorder（7/25–31）：</b>MY 券×2（认付款日）｜SG 再折$10 + sachet双倍。<b>进群双拉力：</b>进群+1券（限1次）；得主群内先公布，24h未回应重抽。老客 3罐 RM489 保留裸价陪衬。</div>
+  <div class="rule"><b>⚠️ 8月无1罐配套</b> — menu 从 RM358 起跳。低价入口（不印主图）：1罐+1Box RM188（🎫1券·CS救单用，只在客户明确拒绝2罐后掏）。</div>
+  <div class="rule"><b>Preorder（7/27一–7/31五）：</b>MY 券×2（认付款日）｜SG 再折$10 + sachet双倍。<b>进群双拉力：</b>进群+1券（限1次）；得主群内先公布，24h未回应重抽。</div>
 </div>
 
 <!-- LUCKY DRAW -->
 <div class="pane" id="draw">
-  <h2>Lucky Draw List · 登记与开奖</h2>
+  <h2>Lucky Draw · 进度与开奖（仅 MY）</h2>
+
   <div class="card">
-    <b>📊 Campaign 实时进度</b>
-    <span id="liveTag" class="tag" style="margin-left:8px;background:#8A8378">未连接 Sheet</span>
-    <button class="btn" style="padding:6px 14px;font-size:12px;margin-left:8px" onclick="pullStats(true)">↻ 刷新</button><br><br>
-    <span id="manualRow">已发出券数 <input type="number" id="dTix" value="0" min="0" onchange="renderStats()">
-    持券人数 <input type="number" id="dPpl" value="0" min="0" onchange="renderStats()">
-    已进群人数 <input type="number" id="dGrp" value="0" min="0" onchange="renderStats()"></span>
+    <b>📊 实时进度</b>
+    <span id="liveTag" class="tag" style="margin-left:8px;background:#8A8378">未连接</span>
+    <button class="btn" style="padding:6px 14px;font-size:12px;margin-left:8px" onclick="pullStats(true)">↻ 刷新</button>
     <div class="grid" style="margin-top:14px" id="statGrid"></div>
-    <p class="note" id="statNote">数据源：登记簿 Google Sheet 进度汇总页（Apps Script Web App）。连接后自动读数，未连接可手动填。计划 ~5,300 张 · 进群目标 ≥75% · 券速 &lt;75% = 红灯④。</p>
+    <p class="note" id="statNote">数据源：作战总表「抽奖名单」tab（由 order sheet 的 Package / Ticket 栏自动生成）。券号区间 800001–805000，对应 Drive 实体券图。</p>
   </div>
+
   <div class="card">
-    <b>登记簿规则（仅限 MY）</b>
+    <b>🏅 配套排行 — 哪个卖最好</b>
+    <div id="pkgRank" style="margin-top:12px"><p class="note">还没有资料</p></div>
+  </div>
+
+  <div class="card">
+    <b>📡 渠道分布</b>
+    <div id="chRank" style="margin-top:12px"><p class="note">还没有资料</p></div>
+    <p class="note">Shopee / Lazada / TikTok / Website 不发券，不会出现在这里。</p>
+  </div>
+
+  <div class="card">
+    <b>🎁 奖品（券面印的 5 等 11 位得主）</b>
     <table>
-      <tr><th>栏</th><th>内容</th></tr>
-      <tr><td>基本</td><td>日期 / 姓名 / 电话 / 配套 / 渠道 / 付款金额</td></tr>
-      <tr><td>券数（自动）</td><td>配套基础券 × 早鸟×2（付款日 7/25–31）＋ 进群+1（限1次）＋ 升级补差</td></tr>
-      <tr><td>券号（自动）</td><td>OXY-00001 起连号；起号–迄号两栏，开奖 VLOOKUP 用</td></tr>
-      <tr><td>纪律</td><td>不跳行不删行；当场发券号给客户；「未通知券号」每日清零</td></tr>
+      <tr><th>等级</th><th>奖品</th><th>名额</th></tr>
+      <tr><td>1st</td><td>Hermès Bag</td><td>1</td></tr>
+      <tr><td>2nd</td><td>Hermès Earring</td><td>2</td></tr>
+      <tr><td>3rd</td><td>Hermès Necklace</td><td>1</td></tr>
+      <tr><td>4th</td><td>Philips Air Fryer</td><td>2</td></tr>
+      <tr><td>5th</td><td>Oxygrainz 3 Tins</td><td>5</td></tr>
     </table>
+    <p class="note">开奖日 8/26 20:00 FB LIVE。⚠️ 11 轮的顺序与穿插时间待定。</p>
   </div>
+
   <div class="card">
-    <b>🏆 五轮开奖表（8/31 LIVE，每轮一份爱马仕 RM3,000+）</b>
-    <table>
-      <tr><th>轮</th><th>时间</th><th>中奖券号</th><th>得主</th></tr>
-      <tr><td>第1轮</td><td>21:00</td><td>________</td><td>现场连线</td></tr>
-      <tr><td>第2轮</td><td>21:20</td><td>________</td><td></td></tr>
-      <tr><td>第3轮</td><td>21:40</td><td>________</td><td>连抽</td></tr>
-      <tr><td>第4轮</td><td>21:42</td><td>________</td><td>连抽</td></tr>
-      <tr><td><b>第5轮 压轴</b></td><td>21:52</td><td>________</td><td>全场高潮</td></tr>
-    </table>
-    <p class="note">规则：一人限中一份（中奖者其余券作废，重复抽中则重抽）· random.org 投屏一镜到底 · 开奖前登记簿 export PDF 存证 · 得主 24h 未回应重抽（名单群内先公布）。</p>
+    <b>🔍 开奖查人</b><br><br>
+    中奖号码：<input type="number" id="lookupNo" placeholder="800042" style="width:140px">
+    <button class="btn" onclick="lookupWinner()">查</button>
+    <div class="drawres" id="lookupRes"></div>
+    <p class="note">也可以直接在作战总表任何格子打 <code>=whoHas(800042)</code> 或 <code>=folderOfTicket(800042)</code>。</p>
   </div>
+
   <div class="card">
-    <b>🎲 开奖模拟器（LIVE 彩排用）</b><br><br>
-    总券数 N：<input type="number" id="drawN" value="5300" min="10">
-    <button class="btn" onclick="doDraw()">抽 5 个号码</button>
+    <b>🎲 开奖模拟器（彩排用）</b><br><br>
+    抽号范围：<input type="number" id="drawFrom" value="800001" style="width:110px"> –
+    <input type="number" id="drawTo" value="800001" style="width:110px">
+    <button class="btn" onclick="doDraw()">抽 11 个号码</button>
     <div class="drawres" id="drawRes"></div>
-    <p class="note">正式开奖用 random.org 投屏（第三方公信力），此模拟器只做彩排流程练习。</p>
+    <p class="note">正式开奖用 random.org 投屏（第三方公信力），此模拟器只做流程练习。范围会自动填成实际已发出的号段。</p>
+  </div>
+
+  <div class="card">
+    <b>⚠️ 开奖前必做</b>
+    <table>
+      <tr><th>时间</th><th>动作</th></tr>
+      <tr><td>8/25 晚</td><td>作战总表跑 <code>freezeDrawList()</code> — 冻结名单存证</td></tr>
+      <tr><td>8/26 20:00</td><td>停止落单 · 最后跑一次 <code>buildDrawList()</code></td></tr>
+      <tr><td>开奖中</td><td>random.org 投屏抽号 → 这里查人 → 现场连线</td></tr>
+      <tr><td>规则</td><td>一人限中一份；重复抽中则重抽；得主 24h 未回应重抽</td></tr>
+    </table>
   </div>
 </div>
 
@@ -658,52 +679,71 @@ function renderFCsg(){
 }
 // ---- DRAW ----
 function doDraw(){
-  const n=parseInt(document.getElementById('drawN').value)||5300;
-  const picks=new Set();
-  while(picks.size<5) picks.add(Math.floor(Math.random()*n)+1);
-  document.getElementById('drawRes').textContent=[...picks].map(x=>'OXY-'+String(x).padStart(5,'0')).join('  ·  ');
+  const a=parseInt(document.getElementById('drawFrom').value)||800001;
+  const b=parseInt(document.getElementById('drawTo').value)||800001;
+  if(b<a){ document.getElementById('drawRes').textContent='范围不对'; return; }
+  const pool=b-a+1;
+  if(pool<11){ document.getElementById('drawRes').textContent=`号段只有 ${pool} 张，还抽不出 11 个`; return; }
+  const picked=new Set();
+  while(picked.size<11) picked.add(a+Math.floor(Math.random()*pool));
+  const tiers=['1st 包包','2nd 耳环','2nd 耳环','3rd 项链','4th 气炸锅','4th 气炸锅',
+               '5th 三罐装','5th 三罐装','5th 三罐装','5th 三罐装','5th 三罐装'];
+  document.getElementById('drawRes').innerHTML =
+    [...picked].map((n,i)=>`${tiers[i]}　<b>${n}</b>`).join('<br>');
 }
 
-// ⚙️ 部署Apps Script后把Web App URL贴这里:
-const SHEET_API = 'https://script.google.com/macros/s/AKfycbxgc3IBf4wp1CZ3CQkWHw31Pq00f-lD4Mp7FYXLyPyWizKolMPSgcT_Lqujm4GbXArx5Q/exec';
+function lookupWinner(){
+  const n=document.getElementById('lookupNo').value;
+  document.getElementById('lookupRes').innerHTML =
+    n ? `请在作战总表打 <b>=whoHas(${n})</b> 或 <b>=folderOfTicket(${n})</b> 查得主` : '请输入号码';
+}
+
 async function pullStats(force){
   if(!SHEET_API){ renderStats(); return; }
   try{
-    const res = await fetch(SHEET_API + (force?'?refresh=1':''));
-    const j = await res.json();
-    document.getElementById('dTix').value = j.tickets||0;
-    document.getElementById('dPpl').value = j.holders||0;
-    document.getElementById('dGrp').value = j.inGroup||0;
-    const t=document.getElementById('liveTag');
-    t.textContent='已连接 · '+new Date(j.updated).toLocaleTimeString();
-    t.style.background='#2E7D32';
-    document.getElementById('manualRow').style.display='none';
+    const r=await fetch(`${SHEET_API}?action=drawstats`);
+    const j=await r.json();
+    document.getElementById('liveTag').textContent='已连接 · '+new Date().toLocaleTimeString('en-GB',{hour:'2-digit',minute:'2-digit'});
+    document.getElementById('liveTag').style.background='#1D9E75';
     renderStats(j);
   }catch(e){
-    document.getElementById('liveTag').textContent='连接失败,手动模式';
+    document.getElementById('liveTag').textContent='连接失败';
     renderStats();
   }
 }
+
 function renderStats(j){
-  const tix=parseInt(document.getElementById('dTix').value)||0;
-  const ppl=parseInt(document.getElementById('dPpl').value)||0;
-  const grp=parseInt(document.getElementById('dGrp').value)||0;
-  const plan=(j&&j.planTotal)||5300;
-  let planNow;
-  if(j&&j.planToDate!=null){planNow=j.planToDate;}
-  else{const today=new Date(); const start=new Date('2026-07-25'); const end=new Date('2026-08-31');
-  let elapsed=Math.min(Math.max((today-start)/(end-start),0),1);
-  planNow=Math.round(plan*elapsed);}
-  const speed=planNow>0?tix/planNow*100:0;
-  const grpRate=ppl>0?grp/ppl*100:0;
-  const fm=n=>Math.round(n).toLocaleString();
+  const fm=n=>Math.round(n||0).toLocaleString();
   const card=(t,v,sub,ok)=>`<div class="fc"><h4>${t}</h4><div class="est ${ok?'ok':'bad'}" style="font-size:19px">${v}</div><p class="note" style="text-align:center">${sub}</p></div>`;
+
+  if(!j){
+    document.getElementById('statGrid').innerHTML=card('未连接','—','跑 buildDrawList() 后刷新',false);
+    return;
+  }
+
+  const avg = j.holders ? (j.tickets/j.holders).toFixed(1) : '—';
+  const ebPct = j.orders ? Math.round(j.earlyBird/j.orders*100) : 0;
+
   document.getElementById('statGrid').innerHTML=
-   card('已发券数',fm(tix)+' 张',`计划至今日 ~${fm(planNow)} 张`,speed>=75||planNow===0)+
-   card('券速达成',(planNow?speed.toFixed(0):'—')+'%','≥75% 绿 / <75% 红灯④',speed>=75||planNow===0)+
-   card('持券人数',fm(ppl)+' 人','平均 '+(ppl?(tix/ppl).toFixed(1):'—')+' 张/人',true)+
-   card('进群率',grpRate.toFixed(0)+'%','目标 ≥75%',grpRate>=75||ppl===0);
-  if(tix>0) document.getElementById('drawN').value=tix;
+    card('已发券数', fm(j.tickets)+' 张', '发到 '+(j.lastSerial>=800001?j.lastSerial:'—'), true)+
+    card('券号剩余', fm(j.remaining)+' 张', '上限 805000', j.remaining>=500)+
+    card('持券单数', fm(j.holders)+' 单', '平均 '+avg+' 张/单', true)+
+    card('早鸟单', fm(j.earlyBird)+' 单', ebPct+'% of '+fm(j.orders), true);
+
+  // 自动填开奖范围
+  if(j.lastSerial>=800001) document.getElementById('drawTo').value=j.lastSerial;
+
+  // 配套排行
+  const rank=(list, unit)=>{
+    if(!list||!list.length) return '<p class="note">还没有资料</p>';
+    const max=Math.max(...list.map(x=>x.sales))||1;
+    return '<table><tr><th>名称</th><th>单数</th><th>销售</th><th>券</th><th style="width:34%"></th></tr>'+
+      list.map(x=>`<tr><td>${x.name}</td><td>${fm(x.orders)}</td><td>${unit}${fm(x.sales)}</td><td>${fm(x.tickets)}</td>
+        <td><div style="background:#F0E5CC;border-radius:99px;height:14px"><div style="background:#F37021;height:14px;border-radius:99px;width:${Math.round(x.sales/max*100)}%"></div></div></td></tr>`).join('')+
+      '</table>';
+  };
+  document.getElementById('pkgRank').innerHTML=rank(j.packages,'RM');
+  document.getElementById('chRank').innerHTML=rank(j.channels,'RM');
 }
 
 function syncRoasMY(){

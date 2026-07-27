@@ -687,7 +687,7 @@ function doDraw(){
   if(pool<11){ document.getElementById('drawRes').textContent=`号段只有 ${pool} 张，还抽不出 11 个`; return; }
   const picked=new Set();
   while(picked.size<11) picked.add(a+Math.floor(Math.random()*pool));
-  const tiers=['1st 包包','2nd 耳环','2nd 耳环','3rd 项链','4th 气炸锅','4th 气炸锅',
+  const tiers=['1st 包包','2nd 耳环','2nd 耳环','3rd 项链','4th 空气炸锅','4th 空气炸锅',
                '5th 三罐装','5th 三罐装','5th 三罐装','5th 三罐装','5th 三罐装'];
   document.getElementById('drawRes').innerHTML =
     [...picked].map((n,i)=>`${tiers[i]}　<b>${n}</b>`).join('<br>');
